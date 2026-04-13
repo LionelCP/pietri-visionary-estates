@@ -2,20 +2,23 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { translations } from "@/i18n/translations";
 
 const navLinks = [
-  { label: "Philosophie", href: "/philosophy" },
-  { label: "Collection", href: "/collection" },
-  { label: "Destinations", href: "/destinations" },
-  { label: "Signature", href: "/signature" },
-  { label: "Services", href: "/services" },
-  { label: "À Propos", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { key: "philosophy" as const, href: "/philosophy" },
+  { key: "collection" as const, href: "/collection" },
+  { key: "destinations" as const, href: "/destinations" },
+  { key: "signature" as const, href: "/signature" },
+  { key: "services" as const, href: "/services" },
+  { key: "about" as const, href: "/about" },
+  { key: "contact" as const, href: "/contact" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { lang, setLang, t } = useLanguage();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
@@ -37,18 +40,32 @@ const Navbar = () => {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {link.label}
+                {t(translations.nav[link.key])}
               </Link>
             ))}
+            <button
+              onClick={() => setLang(lang === "fr" ? "en" : "fr")}
+              className="font-body text-[10px] tracking-[0.2em] uppercase border border-border/60 px-3 py-1.5 text-muted-foreground hover:text-foreground hover:border-primary transition-colors duration-300"
+            >
+              {lang === "fr" ? "EN" : "FR"}
+            </button>
           </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden text-foreground"
-            aria-label="Menu"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-4 lg:hidden">
+            <button
+              onClick={() => setLang(lang === "fr" ? "en" : "fr")}
+              className="font-body text-[10px] tracking-[0.2em] uppercase border border-border/60 px-2.5 py-1 text-muted-foreground"
+            >
+              {lang === "fr" ? "EN" : "FR"}
+            </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-foreground"
+              aria-label="Menu"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -68,7 +85,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className="font-body text-sm tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {link.label}
+                  {t(translations.nav[link.key])}
                 </Link>
               ))}
             </div>
