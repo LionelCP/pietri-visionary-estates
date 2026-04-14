@@ -1,4 +1,5 @@
-import SectionHeading from "@/components/SectionHeading";
+import PageHero from "@/components/PageHero";
+import heroPhilosophy from "@/assets/hero-philosophy.jpg";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { translations } from "@/i18n/translations";
 
@@ -7,10 +8,20 @@ const Signature = () => {
   const s = translations.pages.signature;
 
   return (
-    <main className="pt-20">
-      <section className="py-32 lg:py-40">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <SectionHeading overline={t(s.overline)} title={t(s.title)} subtitle={t(s.subtitle)} />
+    <main>
+      <PageHero
+        image={heroPhilosophy}
+        overline={t(s.overline)}
+        title={t(s.title)}
+        subtitle={t(s.subtitle)}
+        breadcrumbs={[{ label: t(s.overline) }]}
+      />
+
+      <section className="py-24 lg:py-32">
+        <div className="max-w-[900px] mx-auto px-6 lg:px-12 text-center">
+          <p className="font-body text-base text-muted-foreground leading-relaxed">
+            {t(s.subtitle)}
+          </p>
         </div>
       </section>
     </main>

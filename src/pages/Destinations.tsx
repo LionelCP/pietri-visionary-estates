@@ -1,5 +1,6 @@
-import SectionHeading from "@/components/SectionHeading";
+import PageHero from "@/components/PageHero";
 import DestinationsSection from "@/components/home/DestinationsSection";
+import heroCollection from "@/assets/hero-collection.jpg";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { translations } from "@/i18n/translations";
 
@@ -8,12 +9,14 @@ const Destinations = () => {
   const d = translations.pages.destinations;
 
   return (
-    <main className="pt-20">
-      <section className="py-24 lg:py-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <SectionHeading overline={t(d.overline)} title={t(d.title)} subtitle={t(d.subtitle)} />
-        </div>
-      </section>
+    <main>
+      <PageHero
+        image={heroCollection}
+        overline={t(d.overline)}
+        title={t(d.title)}
+        subtitle={t(d.subtitle)}
+        breadcrumbs={[{ label: t(d.overline) }]}
+      />
       <DestinationsSection />
     </main>
   );
