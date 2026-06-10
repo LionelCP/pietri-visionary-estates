@@ -3,17 +3,6 @@ import SectionHeading from "@/components/SectionHeading";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { translations } from "@/i18n/translations";
 
-const destinations = [
-  { name: "Paris", country: "France", properties: 24 },
-  { name: "Côte d'Azur", country: "France", properties: 18 },
-  { name: "Provence", country: "France", properties: 12 },
-  { name: "Londres", country: "Royaume-Uni", properties: 8 },
-  { name: "Santorin", country: "Grèce", properties: 6 },
-  { name: "Marrakech", country: "Maroc", properties: 5 },
-  { name: "Genève", country: "Suisse", properties: 7 },
-  { name: "Lisbonne", country: "Portugal", properties: 9 },
-];
-
 const DestinationsSection = () => {
   const { t } = useLanguage();
   const d = translations.destinations;
@@ -21,16 +10,38 @@ const DestinationsSection = () => {
   return (
     <section className="py-24 lg:py-32 bg-secondary">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <SectionHeading overline={t(d.overline)} title={t(d.title)} subtitle={t(d.subtitle)} />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border">
-          {destinations.map((dest, i) => (
-            <motion.a key={dest.name} href="/destinations" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.08 }} className="group bg-background p-8 lg:p-10 hover:bg-noir-light transition-colors duration-500 cursor-pointer">
-              <h3 className="font-display text-xl lg:text-2xl text-foreground mb-1 group-hover:text-primary transition-colors duration-300">{dest.name}</h3>
-              <p className="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground mb-4">{dest.country}</p>
-              <span className="font-body text-xs text-primary">{dest.properties} {t(d.properties)}</span>
-            </motion.a>
+        <SectionHeading overline={t(d.overline)} title={t(d.title)} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border mt-4">
+          {d.items.map((item, i) => (
+            <motion.div
+              key={item.name.fr}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.12 }}
+              className="bg-background p-10 lg:p-12 flex flex-col"
+            >
+              <h3 className="font-display text-2xl lg:text-3xl text-foreground mb-3">
+                {t(item.name)}
+              </h3>
+              <p className="font-body text-xs tracking-[0.25em] uppercase text-primary mb-6">
+                {t(item.tagline)}
+              </p>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                {t(item.desc)}
+              </p>
+            </motion.div>
           ))}
         </div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="font-body text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto text-center mt-16 lg:mt-20"
+        >
+          {t(d.closing)}
+        </motion.p>
       </div>
     </section>
   );
