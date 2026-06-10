@@ -7,7 +7,7 @@ export const translations = {
     destinations: { fr: "Destinations", en: "Destinations" },
     signature: { fr: "Signature", en: "Signature" },
     services: { fr: "Services", en: "Services" },
-    about: { fr: "À Propos", en: "About" },
+    about: { fr: "Notre histoire", en: "Our story" },
     contact: { fr: "Contact", en: "Contact" },
   },
   hero: {
@@ -205,19 +205,19 @@ export const translations = {
       },
     },
     about: {
-      overline: { fr: "À Propos", en: "About" },
-      title: { fr: "Cabinet Pietri", en: "Cabinet Pietri" },
+      overline: { fr: "Notre histoire", en: "Our story" },
+      title: { fr: "Trouver sa place.", en: "Finding one's place." },
       subtitle: {
-        fr: "Fondé sur la conviction que l'immobilier est avant tout une affaire de rencontres humaines.",
-        en: "Founded on the conviction that real estate is above all about human connections.",
+        fr: "Avant de créer le Cabinet Pietri, nous avons passé une grande partie de notre vie à déménager.",
+        en: "Before founding Cabinet Pietri, we spent much of our lives moving from place to place.",
       },
       p1: {
-        fr: "Cabinet Pietri est né d'un constat : trop souvent, l'immobilier oublie l'essentiel — les gens, leurs histoires, leurs émotions. Nous avons voulu créer une maison où chaque projet est traité comme une rencontre, pas comme une transaction.",
-        en: "Cabinet Pietri was born from an observation: too often, real estate forgets what matters most — people, their stories, their emotions. We wanted to create a house where every project is treated as a meeting, not a transaction.",
+        fr: "Entre la Savoie, Paris, la Bretagne, Londres, Chicago, Miami et d'autres horizons, nous avons connu plus de 17 déménagements en une vingtaine d'années. À chaque départ, il fallait reconstruire des repères. À chaque arrivée, réinventer un quotidien.",
+        en: "Between Savoie, Paris, Brittany, London, Chicago, Miami and other horizons, we went through more than 17 moves over some twenty years. With every departure, we had to rebuild our bearings. With every arrival, reinvent a daily life.",
       },
       p2: {
-        fr: "Notre équipe partage une même sensibilité : le goût des belles pierres, le respect des lieux, et la conviction que le bon accompagnement peut changer la vie d'une famille.",
-        en: "Our team shares the same sensibility: a love for beautiful stones, respect for places, and the conviction that the right guidance can change a family's life.",
+        fr: "Cette expérience a profondément changé notre regard sur l'immobilier. Car avec le temps, nous avons compris qu'une maison n'est jamais simplement un bien. C'est un refuge, un point d'ancrage, un lieu où l'on construit ses souvenirs et où l'on retrouve ceux que l'on aime.",
+        en: "This experience profoundly changed the way we see real estate. Because over time, we understood that a home is never simply a property. It is a refuge, an anchor, a place where we build our memories and reunite with those we love.",
       },
     },
     contact: {
