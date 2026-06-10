@@ -35,6 +35,16 @@ const Services = () => {
               </motion.div>
             ))}
           </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="font-display italic text-xl lg:text-2xl text-foreground text-center max-w-3xl mx-auto mt-20 lg:mt-24 leading-relaxed"
+          >
+            {t(s.closing)}
+          </motion.p>
         </div>
       </section>
     </main>
