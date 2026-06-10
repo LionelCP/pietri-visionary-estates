@@ -167,38 +167,42 @@ export const translations = {
       },
     },
     services: {
-      overline: { fr: "Accompagnement", en: "Guidance" },
-      title: { fr: "À vos côtés", en: "By your side" },
+      overline: { fr: "Notre accompagnement", en: "Our guidance" },
+      title: { fr: "À vos côtés, à chaque étape.", en: "By your side, at every step." },
       items: [
         {
-          title: { fr: "Écoute & Recherche", en: "Listening & Search" },
+          title: { fr: "Écouter", en: "Listen" },
           desc: {
-            fr: "Comprendre votre mode de vie, vos envies et vos rêves pour identifier le lieu qui vous correspond vraiment.",
-            en: "Understanding your lifestyle, desires and dreams to identify the place that truly fits you.",
+            fr: "Parce qu'aucun projet ne se ressemble, nous commençons par vous donner le temps de raconter le vôtre.",
+            en: "Because no two projects are alike, we begin by giving you the time to tell us yours.",
           },
         },
         {
-          title: { fr: "Conseil Patrimonial", en: "Heritage Advisory" },
+          title: { fr: "Comprendre", en: "Understand" },
           desc: {
-            fr: "Vous accompagner dans vos choix avec une vision long terme, pour un patrimoine qui se transmet.",
-            en: "Guiding your choices with a long-term vision, for heritage that is passed down.",
+            fr: "Comprendre non seulement ce que vous recherchez, mais surtout pourquoi vous le recherchez.",
+            en: "Understanding not only what you are looking for, but above all why you are looking for it.",
           },
         },
         {
-          title: { fr: "Mise en Lumière", en: "Bringing to Light" },
+          title: { fr: "Révéler", en: "Reveal" },
           desc: {
-            fr: "Raconter l'histoire de votre bien à travers des images, des mots et une mise en scène authentique.",
-            en: "Telling your property's story through images, words and authentic staging.",
+            fr: "Mettre en lumière ce qui rend un lieu unique et ce qui le distingue réellement.",
+            en: "Bringing to light what makes a place unique and what truly sets it apart.",
           },
         },
         {
-          title: { fr: "Accompagnement Global", en: "Full Support" },
+          title: { fr: "Accompagner", en: "Accompany" },
           desc: {
-            fr: "Du premier échange jusqu'à la remise des clés, et même après : nous restons à vos côtés.",
-            en: "From the first conversation to handing over the keys, and even after: we stay by your side.",
+            fr: "Vous guider avec la même attention du premier échange jusqu'à la concrétisation de votre projet.",
+            en: "Guiding you with the same care from the first conversation to the realization of your project.",
           },
         },
       ],
+      closing: {
+        fr: "Notre métier est d'accompagner des projets immobiliers. Notre vocation est d'accompagner des projets de vie.",
+        en: "Our profession is to support real estate projects. Our calling is to support life projects.",
+      },
     },
     about: {
       overline: { fr: "À Propos", en: "About" },
