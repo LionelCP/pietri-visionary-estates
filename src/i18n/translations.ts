@@ -44,10 +44,40 @@ export const translations = {
   },
   destinations: {
     overline: { fr: "Territoires", en: "Territories" },
-    title: { fr: "Là où la vie est belle", en: "Where life is beautiful" },
+    title: { fr: "Trois territoires, une même vision", en: "Three territories, one vision" },
     subtitle: {
-      fr: "Des villages de Provence aux rivages méditerranéens, nous sommes présents là où les lieux racontent quelque chose.",
-      en: "From the villages of Provence to Mediterranean shores, we are present wherever places have something to tell.",
+      fr: "",
+      en: "",
+    },
+    items: [
+      {
+        name: { fr: "Corse", en: "Corsica" },
+        tagline: { fr: "L'authenticité.", en: "Authenticity." },
+        desc: {
+          fr: "Notre terre de cœur, entre villages perchés, mer Méditerranée et art de vivre insulaire.",
+          en: "Our heartland, between perched villages, the Mediterranean Sea and island art de vivre.",
+        },
+      },
+      {
+        name: { fr: "Monaco", en: "Monaco" },
+        tagline: { fr: "L'excellence.", en: "Excellence." },
+        desc: {
+          fr: "Un univers où discrétion, élégance et exigence accompagnent chaque projet.",
+          en: "A world where discretion, elegance and exacting standards accompany every project.",
+        },
+      },
+      {
+        name: { fr: "Bali", en: "Bali" },
+        tagline: { fr: "L'inspiration.", en: "Inspiration." },
+        desc: {
+          fr: "Une philosophie de vie tournée vers l'équilibre, la beauté et la connexion à l'essentiel.",
+          en: "A philosophy of life oriented toward balance, beauty and connection to what truly matters.",
+        },
+      },
+    ],
+    closing: {
+      fr: "Cabinet Pietri accompagne celles et ceux qui recherchent bien plus qu'un bien immobilier : un lieu de vie, un refuge, un investissement ou un nouveau chapitre de leur histoire.",
+      en: "Cabinet Pietri supports those seeking much more than a property: a place to live, a refuge, an investment or a new chapter of their story.",
     },
     properties: { fr: "propriétés", en: "properties" },
   },
