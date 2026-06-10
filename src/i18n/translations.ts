@@ -122,8 +122,8 @@ export const translations = {
   },
   footer: {
     description: {
-      fr: "Une maison immobilière à taille humaine. Nous croyons que chaque lieu a une âme, et que trouver le bon endroit, c'est trouver un peu de soi.",
-      en: "A human-scale real estate house. We believe every place has a soul, and that finding the right one means finding a part of yourself.",
+      fr: "Nous sommes convaincus que certains lieux nous choisissent autant que nous les choisissons. Notre rôle est simplement de faciliter cette rencontre.",
+      en: "We are convinced that certain places choose us as much as we choose them. Our role is simply to make that meeting happen.",
     },
     navigation: { fr: "Navigation", en: "Navigation" },
     contact: { fr: "Contact", en: "Contact" },
