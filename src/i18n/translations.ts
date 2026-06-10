@@ -23,14 +23,14 @@ export const translations = {
     scroll: { fr: "Défiler", en: "Scroll" },
   },
   manifesto: {
-    overline: { fr: "Ce que nous croyons", en: "What we believe" },
+    overline: { fr: "Une histoire de famille", en: "A family story" },
     quote: {
-      fr: "\"Nous ne vendons pas des murs. Nous aidons des familles à trouver l'endroit où elles écriront leurs plus beaux souvenirs.\"",
-      en: "\"We don't sell walls. We help families find the place where they'll write their most beautiful memories.\"",
+      fr: "\"Cabinet Pietri est avant tout une entreprise familiale.\"",
+      en: "\"Cabinet Pietri is first and foremost a family business.\"",
     },
     description: {
-      fr: "Cabinet Pietri est né d'une conviction simple : derrière chaque propriété, il y a une histoire à vivre. Notre approche mêle écoute attentive, sensibilité architecturale et connaissance profonde des territoires pour créer des rencontres authentiques entre des lieux et ceux qui sauront les habiter.",
-      en: "Cabinet Pietri was born from a simple conviction: behind every property, there's a story waiting to be lived. Our approach blends attentive listening, architectural sensitivity and deep knowledge of territories to create authentic connections between places and those who will bring them to life.",
+      fr: "Fondé par Lionel et Christelle Pietri, le cabinet réunit deux expertises complémentaires : l'expertise immobilière et la transaction. Depuis 2014, nous accompagnons nos clients avec la même conviction : privilégier la qualité de la relation, la justesse du conseil et une connaissance approfondie du marché. Une approche indépendante, humaine et engagée, au service de projets qui méritent toute notre attention.",
+      en: "Founded by Lionel and Christelle Pietri, the firm brings together two complementary areas of expertise: real estate appraisal and transactions. Since 2014, we have guided our clients with the same conviction: prioritizing the quality of the relationship, the accuracy of advice and a deep knowledge of the market. An independent, human and committed approach, serving projects that deserve our full attention.",
     },
   },
   featured: {
