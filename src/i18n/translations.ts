@@ -11,15 +11,15 @@ export const translations = {
     contact: { fr: "Contact", en: "Contact" },
   },
   hero: {
-    overline: { fr: "L'immobilier autrement", en: "Real estate, differently" },
-    title1: { fr: "Trouver un lieu", en: "Find a place" },
-    title2: { fr: "qui vous ressemble", en: "that feels like home" },
+    overline: { fr: "Cabinet Pietri Immobilier", en: "Cabinet Pietri Real Estate" },
+    title1: { fr: "Des lieux pour vivre.", en: "Places to live." },
+    title2: { fr: "Des projets pour durer.", en: "Projects built to last." },
     description: {
-      fr: "Cabinet Pietri accompagne les familles et les passionnés dans la quête du lieu qui portera leur histoire. Chaque propriété a une âme — notre rôle est de vous aider à la reconnaître.",
-      en: "Cabinet Pietri guides families and passionate individuals in their search for the place that will carry their story. Every property has a soul — our role is to help you recognize it.",
+      fr: "Derrière chaque acquisition se cache un projet de vie. Une famille qui s'agrandit. Un retour aux sources. Un investissement pour demain. Un rêve longtemps attendu. Depuis plus de 15 ans, nous accompagnons nos clients avec une conviction simple : les plus belles transactions commencent toujours par une rencontre.",
+      en: "Behind every acquisition lies a life project. A growing family. A return to one's roots. An investment for tomorrow. A long-awaited dream. For over 15 years, we have guided our clients with one simple conviction: the finest transactions always begin with a meeting.",
     },
-    cta1: { fr: "Explorer nos biens", en: "Explore our properties" },
-    cta2: { fr: "Parlons de votre projet", en: "Let's talk about your project" },
+    cta1: { fr: "Découvrir nos biens", en: "Discover our properties" },
+    cta2: { fr: "Échanger avec nous", en: "Talk with us" },
     scroll: { fr: "Défiler", en: "Scroll" },
   },
   manifesto: {
