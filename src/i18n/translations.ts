@@ -40,7 +40,7 @@ export const translations = {
       fr: "Chaque propriété de notre collection a été choisie pour l'émotion qu'elle suscite, le caractère qu'elle dégage et l'histoire qu'elle promet.",
       en: "Every property in our collection was chosen for the emotion it evokes, the character it exudes and the story it promises.",
     },
-    viewAll: { fr: "Voir toute la collection", en: "View full collection" },
+    viewAll: { fr: "Découvrir la collection", en: "Discover the collection" },
   },
   destinations: {
     overline: { fr: "Territoires", en: "Territories" },
