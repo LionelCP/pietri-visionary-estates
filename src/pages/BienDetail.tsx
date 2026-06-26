@@ -247,6 +247,10 @@ const BienDetail = () => {
         </div>
       </section>
 
+      <PropertyMediaSection property={p} />
+
+
+
       {p.matterport_id && (
         <VirtualTourViewer matterportId={p.matterport_id} title={p.title} isOpen={tourOpen} onClose={() => setTourOpen(false)} />
       )}
