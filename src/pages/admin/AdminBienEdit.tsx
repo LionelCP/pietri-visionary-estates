@@ -49,8 +49,14 @@ interface FormState {
   display_order: string;
   matterport_id: string;
   video_url: string;
+  video_url_2: string;
   video_file_url: string;
   hero_video_url: string;
+  drone_video_url: string;
+  virtual_tour_url: string;
+  virtual_tour_iframe: string;
+  show_video: boolean;
+  show_virtual_tour: boolean;
   seo_title: string;
   seo_description: string;
 }
@@ -64,7 +70,10 @@ const empty: FormState = {
   short_description: "", long_description: "", short_description_en: "", long_description_en: "",
   highlights: "", energy_class: "", main_image_url: "", gallery: [],
   plan_pdf_url: "", internal_ref: "", featured: false, coup_de_coeur: false,
-  display_order: "0", matterport_id: "", video_url: "", video_file_url: "", hero_video_url: "",
+  display_order: "0", matterport_id: "",
+  video_url: "", video_url_2: "", video_file_url: "", hero_video_url: "", drone_video_url: "",
+  virtual_tour_url: "", virtual_tour_iframe: "",
+  show_video: true, show_virtual_tour: true,
   seo_title: "", seo_description: "",
 };
 
