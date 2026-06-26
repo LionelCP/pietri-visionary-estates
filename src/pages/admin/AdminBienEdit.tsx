@@ -421,6 +421,62 @@ const AdminBienEdit = () => {
             </div>
           </section>
 
+          {/* Section: vidéos */}
+          <section className="space-y-5">
+            <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Vidéos</h2>
+            <p className="font-body text-xs text-muted-foreground -mt-2">
+              Trois supports vidéo complémentaires : lien YouTube/Vimeo (lecteur dans la galerie), fichier MP4 hébergé, et vidéo de fond (drone) en haut de la fiche.
+            </p>
+
+            <div>
+              <label className={labelCls}>Lien YouTube ou Vimeo</label>
+              <input value={f.video_url} onChange={(e) => set("video_url", e.target.value)} placeholder="https://www.youtube.com/watch?v=… ou https://vimeo.com/…" className={inputCls} />
+              <p className="text-xs text-muted-foreground mt-1">Affichée comme vignette « Vidéo » dans la galerie de la fiche.</p>
+            </div>
+
+            <div>
+              <label className={labelCls}>Vidéo MP4 (upload direct)</label>
+              {f.video_file_url && (
+                <video src={f.video_file_url} controls className="w-72 mb-3 border border-border" />
+              )}
+              <input ref={videoFileRef} type="file" accept="video/mp4,video/webm" hidden onChange={(e) => { const file = e.target.files?.[0]; if (file) handleVideoUpload(file, "main"); }} />
+              <div className="flex flex-wrap gap-3">
+                <button type="button" disabled={videoUploading === "main"} onClick={() => videoFileRef.current?.click()} className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase px-4 py-2.5 border border-border hover:border-primary disabled:opacity-50">
+                  <Upload size={14} /> {videoUploading === "main" ? "Envoi…" : f.video_file_url ? "Remplacer" : "Téléverser"}
+                </button>
+                {f.video_file_url && (
+                  <button type="button" onClick={() => set("video_file_url", "")} className="font-body text-xs tracking-[0.2em] uppercase px-4 py-2.5 border border-border text-destructive hover:border-destructive">
+                    Retirer
+                  </button>
+                )}
+              </div>
+              <input value={f.video_file_url} onChange={(e) => set("video_file_url", e.target.value)} placeholder="ou URL externe MP4" className={`${inputCls} mt-3`} />
+              <p className="text-xs text-muted-foreground mt-1">Format conseillé : MP4 H.264, &lt; 50 Mo. Compressez avec HandBrake si besoin.</p>
+            </div>
+
+            <div>
+              <label className={labelCls}>Vidéo de fond (drone / aérienne)</label>
+              {f.hero_video_url && (
+                <video src={f.hero_video_url} muted loop autoPlay playsInline className="w-72 mb-3 border border-border" />
+              )}
+              <input ref={heroVideoFileRef} type="file" accept="video/mp4,video/webm" hidden onChange={(e) => { const file = e.target.files?.[0]; if (file) handleVideoUpload(file, "hero"); }} />
+              <div className="flex flex-wrap gap-3">
+                <button type="button" disabled={videoUploading === "hero"} onClick={() => heroVideoFileRef.current?.click()} className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase px-4 py-2.5 border border-border hover:border-primary disabled:opacity-50">
+                  <Upload size={14} /> {videoUploading === "hero" ? "Envoi…" : f.hero_video_url ? "Remplacer" : "Téléverser"}
+                </button>
+                {f.hero_video_url && (
+                  <button type="button" onClick={() => set("hero_video_url", "")} className="font-body text-xs tracking-[0.2em] uppercase px-4 py-2.5 border border-border text-destructive hover:border-destructive">
+                    Retirer
+                  </button>
+                )}
+              </div>
+              <input value={f.hero_video_url} onChange={(e) => set("hero_video_url", e.target.value)} placeholder="ou URL externe MP4" className={`${inputCls} mt-3`} />
+              <p className="text-xs text-muted-foreground mt-1">Diffusée en boucle, muette, au-dessus de la galerie. Format conseillé : MP4 16:9, 8–15 s, &lt; 15 Mo.</p>
+            </div>
+          </section>
+
+
+
           {/* Section: extras */}
           <section className="space-y-5">
             <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Extras & SEO</h2>
