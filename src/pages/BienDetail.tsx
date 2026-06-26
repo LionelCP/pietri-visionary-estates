@@ -16,6 +16,7 @@ const BienDetail = () => {
   const [loading, setLoading] = useState(true);
   const [tourOpen, setTourOpen] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [videoOpen, setVideoOpen] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
