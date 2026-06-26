@@ -102,6 +102,9 @@ const AdminBienEdit = () => {
         featured: p.featured, coup_de_coeur: p.coup_de_coeur,
         display_order: p.display_order.toString(),
         matterport_id: p.matterport_id ?? "",
+        video_url: p.video_url ?? "",
+        video_file_url: p.video_file_url ?? "",
+        hero_video_url: p.hero_video_url ?? "",
         seo_title: p.seo_title ?? "", seo_description: p.seo_description ?? "",
       });
       setLoading(false);
