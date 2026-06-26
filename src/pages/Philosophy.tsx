@@ -173,8 +173,9 @@ const content = {
 const Divider = () => <div className="line-gold max-w-24 mx-auto my-16" />;
 
 const Philosophy = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const p = translations.pages.philosophy;
+  const arr = <T extends { fr: string[]; en: string[] }>(o: T) => o[lang] ?? o.fr;
 
   return (
     <main>
