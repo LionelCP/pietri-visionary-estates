@@ -6,7 +6,7 @@ const Footer = () => {
   const { t } = useLanguage();
 
   const footerLinks = [
-    { label: t(translations.nav.collection), href: "/collection" },
+    { label: t(translations.nav.collection), href: "/biens" },
     { label: t(translations.nav.destinations), href: "/destinations" },
     { label: t(translations.nav.services), href: "/services" },
     { label: t(translations.nav.contact), href: "/contact" },
