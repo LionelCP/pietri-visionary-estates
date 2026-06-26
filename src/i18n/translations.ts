@@ -11,12 +11,12 @@ export const translations = {
     contact: { fr: "Contact", en: "Contact" },
   },
   hero: {
-    overline: { fr: "Cabinet Pietri Immobilier — Balagne, Corse", en: "Cabinet Pietri Real Estate — Balagne, Corsica" },
-    title1: { fr: "Immobilier en Balagne :", en: "Real estate in Balagne:" },
-    title2: { fr: "vendre, acheter ou investir avec justesse.", en: "sell, buy or invest with discernment." },
+    overline: { fr: "Cabinet Pietri Immobilier — Corse, Continent & International", en: "Cabinet Pietri Real Estate — Corsica, France & International" },
+    title1: { fr: "Immobilier en Corse,", en: "Real estate in Corsica," },
+    title2: { fr: "sur le continent et à l'international.", en: "on the mainland and internationally." },
     description: {
-      fr: "Cabinet Pietri Immobilier accompagne les propriétaires, acquéreurs et investisseurs dans leurs projets immobiliers en Corse — à L'Île-Rousse, Monticello et dans toute la Balagne — avec une approche locale, patrimoniale et humaine.",
-      en: "Cabinet Pietri Real Estate guides owners, buyers and investors in their property projects across Corsica — in L'Île-Rousse, Monticello and throughout the Balagne region — with a local, patrimonial and human approach.",
+      fr: "Cabinet Pietri Immobilier accompagne propriétaires, acquéreurs et investisseurs dans leurs projets immobiliers — principalement en Corse (Balagne, L'Île-Rousse, Monticello), sur le continent, à Monaco et à Bali — avec une approche locale, patrimoniale et humaine.",
+      en: "Cabinet Pietri Real Estate guides owners, buyers and investors in their property projects — mainly in Corsica (Balagne, L'Île-Rousse, Monticello), on the French mainland, in Monaco and in Bali — with a local, patrimonial and human approach.",
     },
     cta1: { fr: "Parler de mon projet", en: "Discuss my project" },
     cta2: { fr: "Découvrir les biens disponibles", en: "Browse available properties" },
