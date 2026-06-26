@@ -46,6 +46,9 @@ export interface Property {
   coup_de_coeur: boolean;
   display_order: number;
   matterport_id: string | null;
+  video_url: string | null;
+  video_file_url: string | null;
+  hero_video_url: string | null;
   seo_title: string | null;
   seo_description: string | null;
   created_at: string;
