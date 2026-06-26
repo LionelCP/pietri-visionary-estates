@@ -21,8 +21,16 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminBiensList from "./pages/admin/AdminBiensList";
 import AdminBienEdit from "./pages/admin/AdminBienEdit";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import Confidentialite from "./pages/Confidentialite";
+import useVisitTracker from "./hooks/useVisitTracker";
 
 const queryClient = new QueryClient();
+
+const VisitTracker = () => {
+  useVisitTracker();
+  return null;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
