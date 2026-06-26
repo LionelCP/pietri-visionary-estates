@@ -9,6 +9,14 @@ import { fetchPropertyBySlug, formatLocation, formatPrice, type Property } from 
 import { useLanguage } from "@/i18n/LanguageContext";
 import placeholder from "@/assets/hero-collection.jpg";
 
+const getEmbedUrl = (url: string): string | null => {
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) return `https://player.vimeo.com/video/${vm[1]}?autoplay=1`;
+  return null;
+};
+
 const BienDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { lang } = useLanguage();
@@ -16,6 +24,7 @@ const BienDetail = () => {
   const [loading, setLoading] = useState(true);
   const [tourOpen, setTourOpen] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [videoOpen, setVideoOpen] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -108,7 +117,26 @@ const BienDetail = () => {
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
-      <section className="pt-32 pb-12 lg:pt-40">
+      {p.hero_video_url && (
+        <section className="relative w-full h-[60vh] lg:h-[75vh] overflow-hidden bg-background">
+          <video
+            src={p.hero_video_url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster={p.main_image_url ?? undefined}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
+          <div className="absolute bottom-10 left-0 right-0 max-w-[1400px] mx-auto px-6 lg:px-12">
+            <span className="font-body text-[11px] tracking-[0.3em] uppercase text-primary block mb-3">{location}</span>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground leading-[1.05]">{p.title}</h1>
+          </div>
+        </section>
+      )}
+
+      <section className={p.hero_video_url ? "pb-12 pt-12" : "pt-32 pb-12 lg:pt-40"}>
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <Link to="/biens" className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-primary transition-colors mb-8">
             <ArrowLeft size={14} /> {t("Retour aux biens", "Back to properties")}
@@ -128,11 +156,18 @@ const BienDetail = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-4 left-4"><StatusBadge status={p.status} /></div>
-                {p.matterport_id && (
-                  <button onClick={() => setTourOpen(true)} className="absolute top-4 right-4 flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border/50 px-3 py-2 font-body text-[10px] tracking-[0.15em] uppercase text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
-                    <Play size={12} className="fill-current" /> {t("Visite 3D", "3D Tour")}
-                  </button>
-                )}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                  {p.matterport_id && (
+                    <button onClick={() => setTourOpen(true)} className="flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border/50 px-3 py-2 font-body text-[10px] tracking-[0.15em] uppercase text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+                      <Play size={12} className="fill-current" /> {t("Visite 3D", "3D Tour")}
+                    </button>
+                  )}
+                  {(p.video_url || p.video_file_url) && (
+                    <button onClick={() => setVideoOpen(true)} className="flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border/50 px-3 py-2 font-body text-[10px] tracking-[0.15em] uppercase text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+                      <Play size={12} className="fill-current" /> {t("Vidéo", "Video")}
+                    </button>
+                  )}
+                </div>
               </div>
               {allImages.length > 1 && (
                 <div className="grid grid-cols-4 gap-3">
@@ -144,6 +179,7 @@ const BienDetail = () => {
                 </div>
               )}
             </div>
+
 
             {/* Infos */}
             <div>
@@ -212,6 +248,21 @@ const BienDetail = () => {
 
       {p.matterport_id && (
         <VirtualTourViewer matterportId={p.matterport_id} title={p.title} isOpen={tourOpen} onClose={() => setTourOpen(false)} />
+      )}
+
+      {videoOpen && (p.video_url || p.video_file_url) && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm p-6" onClick={() => setVideoOpen(false)}>
+          <div className="relative w-full max-w-5xl aspect-video" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setVideoOpen(false)} aria-label="Fermer" className="absolute -top-10 right-0 font-body text-xs tracking-[0.2em] uppercase text-foreground hover:text-primary">
+              {t("Fermer", "Close")} ✕
+            </button>
+            {p.video_url && getEmbedUrl(p.video_url) ? (
+              <iframe src={getEmbedUrl(p.video_url)!} title={p.title} className="w-full h-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
+            ) : p.video_file_url ? (
+              <video src={p.video_file_url} controls autoPlay className="w-full h-full object-contain bg-black" />
+            ) : null}
+          </div>
+        </div>
       )}
     </main>
   );

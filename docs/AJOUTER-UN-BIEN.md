@@ -1,102 +1,123 @@
-# 🏡 Comment ajouter un bien sur le site Cabinet Pietri
+# 🏡 Gérer les biens sur le site Cabinet Pietri
 
-## Processus en 3 étapes
-
----
-
-### Étape 1 — Préparer les fichiers
-
-1. **Photo principale** (obligatoire)
-   - Format : `.jpg` (préféré) ou `.png`
-   - Résolution recommandée : 1200×1600 px minimum (portrait 3:4)
-   - Placez le fichier dans `src/assets/properties/`
-   - Nommage : `nom-du-bien.jpg` (ex: `mas-oliviers.jpg`)
-
-2. **Visite virtuelle Matterport** (optionnel)
-   - Connectez-vous sur [my.matterport.com](https://my.matterport.com)
-   - Récupérez l'ID du tour dans l'URL : `https://my.matterport.com/show/?m=VOTRE_ID`
-   - Notez cet ID (ex: `SxQL3iGnMqk`)
+Tous les biens du site sont gérés depuis **l'espace administrateur en ligne**.
+Aucune intervention dans le code n'est nécessaire.
 
 ---
 
-### Étape 2 — Ajouter le bien dans le fichier de données
+## 🔐 Se connecter à l'admin
 
-Ouvrez le fichier `src/data/properties.ts`
-
-**A) Importez la photo** en haut du fichier, dans la section `IMPORTS PHOTOS` :
-
-```typescript
-import masOliviers from "@/assets/properties/mas-oliviers.jpg";
-```
-
-**B) Ajoutez le bien** dans le tableau `properties`, à l'endroit indiqué par le commentaire `AJOUTEZ VOS NOUVEAUX BIENS ICI` :
-
-```typescript
-{
-  id: "mas-des-oliviers",              // Identifiant unique (URL-friendly)
-  image: masOliviers,                  // Variable importée ci-dessus
-  title: "Mas des Oliviers",           // Nom affiché
-  location: "Luberon — France",        // Format : "Ville — Pays"
-  price: "€ 3 200 000",               // Prix ou "on-request"
-  tag: "nouveau",                      // "exclusivite", "signature", "nouveau" ou rien
-  beds: 5,                             // Nombre de chambres
-  baths: 3,                            // Nombre de salles de bain
-  area: "280 m²",                      // Surface
-  matterportId: "votre-id-ici",        // ID Matterport (supprimer si pas de visite)
-  category: "france",                  // "france", "international" ou "signature"
-  featured: true,                      // true = affiché sur la page d'accueil
-  descriptionFr: "Description en français...",
-  descriptionEn: "English description...",
-},
-```
+1. Aller sur **`/admin/login`**
+2. Se connecter avec votre compte administrateur
+3. Vous arrivez sur la liste des biens : **`/admin/biens`**
 
 ---
 
-### Étape 3 — Vérifier
+## ➕ Ajouter un bien
 
-Le bien apparaît automatiquement :
-- ✅ Sur la **page Collection** (`/collection`)
-- ✅ Sur la **page d'accueil** (si `featured: true`)
-- ✅ Avec le **bouton "Visite 3D"** (si `matterportId` est renseigné)
+Depuis `/admin/biens`, cliquer sur **« Ajouter un bien »** puis remplir le formulaire.
+
+### 1. Identité
+- **Titre** *(obligatoire)* — ex : *Villa vue mer*
+- **Slug URL** — généré automatiquement à partir du titre + ville (modifiable)
+- **Statut** — voir tableau plus bas
+- **Type** — Appartement / Maison / Villa / Terrain / Local commercial / Programme / Autre
+- **Référence interne** — votre référence privée (optionnelle)
+
+### 2. Localisation
+- **Région** — Corse / Continent / Monaco / Bali / Autre
+- **Ville** et **Secteur / quartier**
+
+### 3. Prix
+- Cocher **« Prix sur demande »** pour masquer le montant
+- Sinon : saisir le **prix en €** (chiffre). Affichage personnalisé optionnel (ex : `€ 1 250 000`)
+
+### 4. Caractéristiques
+- Surface, pièces, chambres, salles de bain, étage
+- Cases à cocher : terrasse, jardin, balcon, vue mer / montagne / dégagée
+- Classe énergie
+
+### 5. Descriptions
+- Courte + longue, en **français ET anglais** (bilingue)
+- **Points forts** : un par ligne, affichés en encadré
+
+### 6. Photos
+- **Photo principale** — upload direct ou URL externe
+- **Galerie** — upload multiple. Cliquer sur l'étoile d'une photo pour la promouvoir en principale.
+
+### 7. Vidéos *(nouveau)*
+Trois supports complémentaires, tous optionnels :
+
+| Champ | Usage | Format conseillé |
+|---|---|---|
+| **Lien YouTube / Vimeo** | Vignette « Vidéo » dans la galerie, lecteur intégré au clic | URL YouTube ou Vimeo standard |
+| **Vidéo MP4 (upload)** | Lecteur HTML5 dans la galerie | MP4 H.264, **< 50 Mo**, compressé pour le web (HandBrake) |
+| **Vidéo de fond (drone)** | Diffusée en boucle, muette, en haut de la fiche | MP4 16:9, **8–15 s**, < 15 Mo |
+
+> 💡 **Astuce** : pour la vidéo drone, prévoir un export « web » court et léger. La photo principale sert de poster pendant le chargement.
+
+### 8. Visite virtuelle Matterport
+- Récupérer l'ID dans l'URL de votre tour : `my.matterport.com/show/?m=`**`SxQL3iGnMqk`**
+- Coller cet ID dans le champ **« ID Matterport »**
+- Le bouton **« Visite 3D »** apparaît automatiquement sur la fiche
+
+### 9. Options & SEO
+- **Afficher en page d'accueil** — sélection éditoriale
+- **Coup de cœur** — badge spécial
+- **Ordre d'affichage** — plus petit = en premier
+- **SEO title / description** — optionnels (sinon générés automatiquement)
+
+Cliquer enfin sur **« Créer le bien »**. La fiche est immédiatement publiée selon son statut.
 
 ---
 
-## 📋 Référence rapide des champs
+## ✏️ Mettre à jour un bien
 
-| Champ | Obligatoire | Exemple | Description |
-|-------|-------------|---------|-------------|
-| `id` | ✅ | `"villa-mer"` | Identifiant unique, sans espaces |
-| `image` | ✅ | `villaMer` | Variable de l'import photo |
-| `title` | ✅ | `"Villa Mer"` | Nom affiché |
-| `location` | ✅ | `"Nice — France"` | Ville — Pays |
-| `price` | ✅ | `"€ 2 500 000"` | Prix ou `"on-request"` |
-| `category` | ✅ | `"france"` | `france` / `international` / `signature` |
-| `tag` | ❌ | `"nouveau"` | Badge sur la photo |
-| `beds` | ❌ | `4` | Chambres |
-| `baths` | ❌ | `3` | Salles de bain |
-| `area` | ❌ | `"250 m²"` | Surface |
-| `matterportId` | ❌ | `"SxQL3iGnMqk"` | Active la visite 3D |
-| `featured` | ❌ | `true` | Affiche en page d'accueil |
-| `descriptionFr` | ❌ | `"..."` | Description FR |
-| `descriptionEn` | ❌ | `"..."` | Description EN |
+1. `/admin/biens` → cliquer sur le bien à modifier
+2. Modifier les champs voulus
+3. **« Enregistrer »** — mise à jour immédiate sur le site public
+
+---
+
+## 📊 Les statuts et leur effet
+
+| Statut | Visible sur le site public ? | Badge affiché |
+|---|---|---|
+| **Disponible** | ✅ Oui, en premier | — |
+| **Sous offre** | ✅ Oui | « Sous offre » |
+| **Réservé** | ✅ Oui | « Réservé » |
+| **Vendu** | ✅ Oui, en fin de liste | « Vendu » |
+| **Masqué** | ❌ Non — visible uniquement dans l'admin | — |
+
+> 💡 **Retirer temporairement un bien sans le supprimer** : passer son statut à **« Masqué »**.
+
+---
+
+## 🎥 Récapitulatif vidéos & visites virtuelles
+
+✅ **Visites virtuelles Matterport** — supportées nativement (champ ID Matterport)
+✅ **Vidéos YouTube / Vimeo** — lien à coller, lecteur intégré
+✅ **Vidéos MP4 hébergées** — upload direct dans l'admin
+✅ **Vidéos drone en fond de fiche** — autoplay muet, immersif
+
+Tous ces médias sont **optionnels** et **cumulables** sur une même fiche.
 
 ---
 
 ## 💡 Astuces
 
-- **Prix "Sur demande"** : Mettez `price: "on-request"` — le site affichera automatiquement "Sur demande" en FR et "On request" en EN
-- **Tags bilingues** : Les tags `exclusivite`, `signature` et `nouveau` sont automatiquement traduits
-- **Pas de visite virtuelle ?** Supprimez simplement la ligne `matterportId` — le bouton "Visite 3D" n'apparaîtra pas
-- **Retirer de l'accueil** : Mettez `featured: false` — le bien reste visible dans la Collection
+- **Prix sur demande** : cocher la case → affiche « Prix sur demande » / « Price on request »
+- **Retirer de l'accueil** : décocher « Afficher en page d'accueil »
+- **Mettre en avant** : « Coup de cœur » + ordre d'affichage faible
+- **Vidéo trop lourde** : utiliser [HandBrake](https://handbrake.fr) (preset *Web → Vimeo YouTube HQ 1080p60*)
+- **Pas de Matterport ?** Laisser le champ vide, le bouton « Visite 3D » n'apparaîtra pas
 
 ---
 
-## 🔧 Pour aller plus loin
+## 🆘 Besoin d'aide ?
 
-### Demander à Lovable d'ajouter un bien
+Vous pouvez aussi demander directement dans le chat Lovable :
 
-Vous pouvez simplement dire dans le chat :
+> *« Ajoute un bien : Villa Azur à Saint-Tropez, 6 chambres, 520 m², 7 500 000 €, statut disponible, vidéo YouTube https://… »*
 
-> "Ajoute un nouveau bien : Villa Azur à Saint-Tropez, 6 chambres, 4 SDB, 520 m², prix 7 500 000€, catégorie france, tag signature, ID Matterport : ABC123"
-
-Lovable ajoutera le bien automatiquement pour vous.
+Lovable créera le bien pour vous.

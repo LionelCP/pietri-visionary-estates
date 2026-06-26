@@ -33,6 +33,7 @@ export type Database = {
           has_open_view: boolean
           has_sea_view: boolean
           has_terrace: boolean
+          hero_video_url: string | null
           highlights: string[]
           id: string
           internal_ref: string | null
@@ -56,6 +57,8 @@ export type Database = {
           status: Database["public"]["Enums"]["property_status"]
           title: string
           updated_at: string
+          video_file_url: string | null
+          video_url: string | null
         }
         Insert: {
           area_m2?: number | null
@@ -75,6 +78,7 @@ export type Database = {
           has_open_view?: boolean
           has_sea_view?: boolean
           has_terrace?: boolean
+          hero_video_url?: string | null
           highlights?: string[]
           id?: string
           internal_ref?: string | null
@@ -98,6 +102,8 @@ export type Database = {
           status?: Database["public"]["Enums"]["property_status"]
           title: string
           updated_at?: string
+          video_file_url?: string | null
+          video_url?: string | null
         }
         Update: {
           area_m2?: number | null
@@ -117,6 +123,7 @@ export type Database = {
           has_open_view?: boolean
           has_sea_view?: boolean
           has_terrace?: boolean
+          hero_video_url?: string | null
           highlights?: string[]
           id?: string
           internal_ref?: string | null
@@ -140,6 +147,8 @@ export type Database = {
           status?: Database["public"]["Enums"]["property_status"]
           title?: string
           updated_at?: string
+          video_file_url?: string | null
+          video_url?: string | null
         }
         Relationships: []
       }
