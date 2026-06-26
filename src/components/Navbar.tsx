@@ -8,9 +8,9 @@ import { translations } from "@/i18n/translations";
 const navLinks = [
   { key: "philosophy" as const, href: "/philosophy" },
   { key: "collection" as const, href: "/biens" },
+  { key: "sell" as const, href: "/services#vendre" },
+  { key: "buy" as const, href: "/services#acheter" },
   { key: "destinations" as const, href: "/destinations" },
-  { key: "signature" as const, href: "/signature" },
-  { key: "services" as const, href: "/services" },
   { key: "about" as const, href: "/about" },
   { key: "contact" as const, href: "/contact" },
 ];

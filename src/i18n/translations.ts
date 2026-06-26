@@ -4,6 +4,8 @@ export const translations = {
   nav: {
     philosophy: { fr: "Philosophie", en: "Philosophy" },
     collection: { fr: "Collection", en: "Collection" },
+    sell: { fr: "Vendre", en: "Sell" },
+    buy: { fr: "Acheter", en: "Buy" },
     destinations: { fr: "Destinations", en: "Destinations" },
     signature: { fr: "Signature", en: "Signature" },
     services: { fr: "Services", en: "Services" },
