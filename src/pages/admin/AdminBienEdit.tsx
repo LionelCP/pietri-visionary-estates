@@ -186,6 +186,9 @@ const AdminBienEdit = () => {
       coup_de_coeur: f.coup_de_coeur,
       display_order: Number(f.display_order) || 0,
       matterport_id: f.matterport_id.trim() || null,
+      video_url: f.video_url.trim() || null,
+      video_file_url: f.video_file_url.trim() || null,
+      hero_video_url: f.hero_video_url.trim() || null,
       seo_title: f.seo_title.trim() || null,
       seo_description: f.seo_description.trim() || null,
     };
