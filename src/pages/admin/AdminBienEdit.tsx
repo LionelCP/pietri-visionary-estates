@@ -494,7 +494,63 @@ const AdminBienEdit = () => {
               <input value={f.hero_video_url} onChange={(e) => set("hero_video_url", e.target.value)} placeholder="ou URL externe MP4" className={`${inputCls} mt-3`} />
               <p className="text-xs text-muted-foreground mt-1">Diffusée en boucle, muette, au-dessus de la galerie. Format conseillé : MP4 16:9, 8–15 s, &lt; 15 Mo.</p>
             </div>
+
+            <div>
+              <label className={labelCls}>Vidéo secondaire (YouTube / Vimeo / MP4)</label>
+              <input value={f.video_url_2} onChange={(e) => set("video_url_2", e.target.value)} placeholder="https://…" className={inputCls} />
+              <p className="text-xs text-muted-foreground mt-1">Deuxième vidéo (ex. intérieur + extérieur). Affichée dans la section « Découvrir le bien autrement ».</p>
+            </div>
+
+            <div>
+              <label className={labelCls}>Vidéo drone / aérienne (lecteur)</label>
+              <input value={f.drone_video_url} onChange={(e) => set("drone_video_url", e.target.value)} placeholder="https://… ou URL MP4" className={inputCls} />
+              <p className="text-xs text-muted-foreground mt-1">Affichée comme carte dédiée « Vue aérienne ». Distincte de la vidéo de fond.</p>
+            </div>
+
+            <label className={`${checkCls} pt-2`}>
+              <input type="checkbox" checked={f.show_video} onChange={(e) => set("show_video", e.target.checked)} className="accent-primary" />
+              Afficher la section vidéo sur la fiche publique
+            </label>
           </section>
+
+          {/* Section: visite virtuelle */}
+          <section className="space-y-5">
+            <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Visite virtuelle</h2>
+            <p className="font-body text-xs text-muted-foreground -mt-2">
+              Trois options possibles. Renseignez celle qui correspond à votre prestataire — la fiche utilisera la première disponible.
+            </p>
+
+            <div>
+              <label className={labelCls}>ID Matterport</label>
+              <input value={f.matterport_id} onChange={(e) => set("matterport_id", e.target.value)} placeholder="SxQL3iGnMqk" className={inputCls} />
+              <p className="text-xs text-muted-foreground mt-1">Identifiant trouvé dans l'URL Matterport : <code>my.matterport.com/show/?m=<strong>ID</strong></code></p>
+            </div>
+
+            <div>
+              <label className={labelCls}>Lien visite virtuelle (Kuula, 360°, autre)</label>
+              <input value={f.virtual_tour_url} onChange={(e) => set("virtual_tour_url", e.target.value)} placeholder="https://kuula.co/share/…" className={inputCls} />
+              <p className="text-xs text-muted-foreground mt-1">Pour ouvrir la visite dans un nouvel onglet si l'intégration iframe n'est pas possible.</p>
+            </div>
+
+            <div>
+              <label className={labelCls}>Code iframe brut (avancé)</label>
+              <textarea
+                rows={3}
+                value={f.virtual_tour_iframe}
+                onChange={(e) => set("virtual_tour_iframe", e.target.value)}
+                placeholder='<iframe src="..." allowfullscreen></iframe>'
+                className={`${inputCls} font-mono text-xs`}
+              />
+              <p className="text-xs text-muted-foreground mt-1">⚠️ À utiliser uniquement avec un prestataire de confiance. L'iframe sera intégré tel quel (sandbox sécurisée).</p>
+            </div>
+
+            <label className={`${checkCls} pt-2`}>
+              <input type="checkbox" checked={f.show_virtual_tour} onChange={(e) => set("show_virtual_tour", e.target.checked)} className="accent-primary" />
+              Afficher la visite virtuelle sur la fiche publique
+            </label>
+          </section>
+
+
 
 
 
