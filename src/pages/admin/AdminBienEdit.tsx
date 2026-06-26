@@ -64,7 +64,8 @@ const empty: FormState = {
   short_description: "", long_description: "", short_description_en: "", long_description_en: "",
   highlights: "", energy_class: "", main_image_url: "", gallery: [],
   plan_pdf_url: "", internal_ref: "", featured: false, coup_de_coeur: false,
-  display_order: "0", matterport_id: "", seo_title: "", seo_description: "",
+  display_order: "0", matterport_id: "", video_url: "", video_file_url: "", hero_video_url: "",
+  seo_title: "", seo_description: "",
 };
 
 const AdminBienEdit = () => {
