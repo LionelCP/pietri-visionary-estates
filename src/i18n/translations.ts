@@ -134,26 +134,26 @@ export const translations = {
     items: [
       {
         name: { fr: "Corse", en: "Corsica" },
-        tagline: { fr: "L'authenticité.", en: "Authenticity." },
+        tagline: { fr: "L'ancrage.", en: "Rootedness." },
         desc: {
-          fr: "Notre terre de cœur, entre villages perchés, mer Méditerranée et art de vivre insulaire.",
-          en: "Our heartland, between perched villages, the Mediterranean Sea and island art de vivre.",
+          fr: "Notre terre de cœur. Entre mer, villages, maquis et patrimoine familial, la Corse demande une approche sensible, précise et respectueuse de chaque lieu.",
+          en: "Our heartland. Between sea, villages, maquis and family heritage, Corsica calls for a sensitive, precise approach that respects each place.",
         },
       },
       {
-        name: { fr: "Monaco", en: "Monaco" },
-        tagline: { fr: "L'excellence.", en: "Excellence." },
+        name: { fr: "Continent", en: "Mainland" },
+        tagline: { fr: "La sélection.", en: "Selection." },
         desc: {
-          fr: "Un univers où discrétion, élégance et exigence accompagnent chaque projet.",
-          en: "A world where discretion, elegance and exacting standards accompany every project.",
+          fr: "Nous accompagnons des projets choisis sur le continent, notamment lorsque le bien, le client ou l'opportunité appelle une approche discrète, patrimoniale et sur mesure.",
+          en: "We support selected projects on the mainland, particularly when the property, the client or the opportunity calls for a discreet, patrimonial and bespoke approach.",
         },
       },
       {
-        name: { fr: "Bali", en: "Bali" },
-        tagline: { fr: "L'inspiration.", en: "Inspiration." },
+        name: { fr: "Asie", en: "Asia" },
+        tagline: { fr: "L'ouverture.", en: "Openness." },
         desc: {
-          fr: "Une philosophie de vie tournée vers l'équilibre, la beauté et la connexion à l'essentiel.",
-          en: "A philosophy of life oriented toward balance, beauty and connection to what truly matters.",
+          fr: "De Bali à la Thaïlande, nous sélectionnons des projets tournés vers l'art de vivre, l'équilibre et une autre manière d'habiter ou de transmettre.",
+          en: "From Bali to Thailand, we select projects oriented toward art de vivre, balance and another way of living or passing on a property.",
         },
       },
     ],
