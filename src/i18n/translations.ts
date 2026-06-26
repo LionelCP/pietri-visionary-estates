@@ -11,16 +11,96 @@ export const translations = {
     contact: { fr: "Contact", en: "Contact" },
   },
   hero: {
-    overline: { fr: "Cabinet Pietri Immobilier", en: "Cabinet Pietri Real Estate" },
-    title1: { fr: "Des lieux pour vivre.", en: "Places to live." },
-    title2: { fr: "Des projets pour durer.", en: "Projects built to last." },
+    overline: { fr: "Cabinet Pietri Immobilier — Balagne, Corse", en: "Cabinet Pietri Real Estate — Balagne, Corsica" },
+    title1: { fr: "Immobilier en Balagne :", en: "Real estate in Balagne:" },
+    title2: { fr: "vendre, acheter ou investir avec justesse.", en: "sell, buy or invest with discernment." },
     description: {
-      fr: "Derrière chaque acquisition se cache un projet de vie. Une famille qui s'agrandit. Un retour aux sources. Un investissement pour demain. Un rêve longtemps attendu. Depuis plus de 15 ans, nous accompagnons nos clients avec une conviction simple : les plus belles transactions commencent toujours par une rencontre.",
-      en: "Behind every acquisition lies a life project. A growing family. A return to one's roots. An investment for tomorrow. A long-awaited dream. For over 15 years, we have guided our clients with one simple conviction: the finest transactions always begin with a meeting.",
+      fr: "Cabinet Pietri Immobilier accompagne les propriétaires, acquéreurs et investisseurs dans leurs projets immobiliers en Corse — à L'Île-Rousse, Monticello et dans toute la Balagne — avec une approche locale, patrimoniale et humaine.",
+      en: "Cabinet Pietri Real Estate guides owners, buyers and investors in their property projects across Corsica — in L'Île-Rousse, Monticello and throughout the Balagne region — with a local, patrimonial and human approach.",
     },
-    cta1: { fr: "Découvrir nos biens", en: "Discover our properties" },
-    cta2: { fr: "Échanger avec nous", en: "Talk with us" },
+    cta1: { fr: "Parler de mon projet", en: "Discuss my project" },
+    cta2: { fr: "Découvrir les biens disponibles", en: "Browse available properties" },
     scroll: { fr: "Défiler", en: "Scroll" },
+  },
+  services: {
+    overline: { fr: "Nos accompagnements", en: "Our services" },
+    title: { fr: "Vendre, acheter, investir en Corse.", en: "Sell, buy and invest in Corsica." },
+    subtitle: {
+      fr: "Trois manières de vous accompagner, avec la même exigence de justesse et de discrétion.",
+      en: "Three ways to guide you, with the same commitment to discernment and discretion.",
+    },
+    items: [
+      {
+        title: { fr: "Vendre un bien en Corse", en: "Selling a property in Corsica" },
+        desc: {
+          fr: "Un accompagnement structuré pour valoriser votre bien, préparer sa mise en marché et sécuriser chaque étape de la vente.",
+          en: "A structured process to enhance your property's value, prepare its launch on the market and secure every step of the sale.",
+        },
+        cta: { fr: "Estimer mon bien", en: "Get an estimate" },
+      },
+      {
+        title: { fr: "Acheter en Balagne", en: "Buying in Balagne" },
+        desc: {
+          fr: "Une recherche ciblée pour trouver un lieu cohérent avec votre projet de vie, votre rythme et vos critères patrimoniaux.",
+          en: "A focused search to find a place aligned with your life project, your pace and your heritage criteria.",
+        },
+        cta: { fr: "Définir ma recherche", en: "Define my search" },
+      },
+      {
+        title: { fr: "Investir ou acquérir une résidence secondaire", en: "Investing or acquiring a second home" },
+        desc: {
+          fr: "Une approche locale et réaliste pour analyser le potentiel d'un bien, son usage, son emplacement et sa cohérence patrimoniale.",
+          en: "A local, grounded approach to assess a property's potential, its use, location and overall fit within your estate.",
+        },
+        cta: { fr: "Échanger avec nous", en: "Talk with us" },
+      },
+    ],
+  },
+  trust: {
+    overline: { fr: "Pourquoi nous choisir", en: "Why choose us" },
+    title: { fr: "Pourquoi Cabinet Pietri Immobilier ?", en: "Why Cabinet Pietri Real Estate?" },
+    items: [
+      {
+        title: { fr: "Une connaissance fine du territoire", en: "Deep local knowledge" },
+        desc: {
+          fr: "Une lecture précise de la Balagne, de L'Île-Rousse, de Monticello et du marché immobilier corse.",
+          en: "A precise reading of Balagne, L'Île-Rousse, Monticello and the wider Corsican market.",
+        },
+      },
+      {
+        title: { fr: "Une approche patrimoniale et indépendante", en: "An independent, patrimonial approach" },
+        desc: {
+          fr: "Un conseil humain, libre de tout réseau, pensé pour la cohérence de votre patrimoine sur le long terme.",
+          en: "Human, independent advice — free of network ties — designed for the long-term coherence of your estate.",
+        },
+      },
+      {
+        title: { fr: "Une expérience de terrain", en: "Hands-on experience" },
+        desc: {
+          fr: "Vente, acquisition, accompagnement : une pratique concrète et exigeante de l'immobilier en Corse.",
+          en: "Sales, acquisitions and advisory: a concrete, demanding practice of real estate in Corsica.",
+        },
+      },
+      {
+        title: { fr: "Une lecture au-delà des mètres carrés", en: "Beyond the square metres" },
+        desc: {
+          fr: "Emplacement, usage, potentiel, cohérence du projet : nous lisons chaque bien dans toutes ses dimensions.",
+          en: "Location, use, potential and project fit: we read each property in all its dimensions.",
+        },
+      },
+    ],
+  },
+  finalCta: {
+    overline: { fr: "Parlons de votre projet", en: "Let's talk about your project" },
+    title: { fr: "Un projet immobilier en Corse ? Échangeons.", en: "A real estate project in Corsica? Let's talk." },
+    subtitle: {
+      fr: "Vendre, acheter, investir ou simplement faire le point sur la valeur de votre bien : nous prenons le temps de vous écouter.",
+      en: "Selling, buying, investing — or simply assessing the value of your property: we take the time to listen.",
+    },
+    project: { fr: "Parler de mon projet", en: "Discuss my project" },
+    estimate: { fr: "Estimer mon bien", en: "Estimate my property" },
+    browse: { fr: "Découvrir les biens disponibles", en: "Browse available properties" },
+    callback: { fr: "Être rappelé", en: "Request a callback" },
   },
   manifesto: {
     overline: { fr: "Une histoire de famille", en: "A family story" },

@@ -10,7 +10,7 @@ const HeroSection = () => {
   return (
     <section className="relative h-screen overflow-hidden">
       <div className="absolute inset-0">
-        <img src={heroImage} alt="Luxury Mediterranean villa at dusk" width={1920} height={1080} className="w-full h-full object-cover animate-ken-burns" />
+        <img src={heroImage} alt="Villa de prestige en Balagne, Corse — Cabinet Pietri Immobilier" width={1920} height={1080} className="w-full h-full object-cover animate-ken-burns" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
       </div>
@@ -28,10 +28,10 @@ const HeroSection = () => {
               {t(h.description)}
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.1 }} className="flex flex-col sm:flex-row gap-4">
-              <a href="/collection" className="inline-flex items-center justify-center font-body text-xs tracking-[0.2em] uppercase px-8 py-4 bg-primary text-primary-foreground hover:bg-gold-light transition-colors duration-300">
+              <a href="/contact" className="inline-flex items-center justify-center font-body text-xs tracking-[0.2em] uppercase px-8 py-4 bg-primary text-primary-foreground hover:bg-gold-light transition-colors duration-300">
                 {t(h.cta1)}
               </a>
-              <a href="/contact" className="inline-flex items-center justify-center font-body text-xs tracking-[0.2em] uppercase px-8 py-4 border border-foreground/30 text-foreground hover:border-primary hover:text-primary transition-colors duration-300">
+              <a href="/collection" className="inline-flex items-center justify-center font-body text-xs tracking-[0.2em] uppercase px-8 py-4 border border-foreground/30 text-foreground hover:border-primary hover:text-primary transition-colors duration-300">
                 {t(h.cta2)}
               </a>
             </motion.div>
