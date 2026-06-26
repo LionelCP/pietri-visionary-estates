@@ -15,6 +15,7 @@ import BienDetail from "./pages/BienDetail";
 import Destinations from "./pages/Destinations";
 import Signature from "./pages/Signature";
 import Services from "./pages/Services";
+import Acheter from "./pages/Acheter";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
