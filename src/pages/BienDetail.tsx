@@ -117,7 +117,26 @@ const BienDetail = () => {
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
-      <section className="pt-32 pb-12 lg:pt-40">
+      {p.hero_video_url && (
+        <section className="relative w-full h-[60vh] lg:h-[75vh] overflow-hidden bg-background">
+          <video
+            src={p.hero_video_url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster={p.main_image_url ?? undefined}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
+          <div className="absolute bottom-10 left-0 right-0 max-w-[1400px] mx-auto px-6 lg:px-12">
+            <span className="font-body text-[11px] tracking-[0.3em] uppercase text-primary block mb-3">{location}</span>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground leading-[1.05]">{p.title}</h1>
+          </div>
+        </section>
+      )}
+
+      <section className={p.hero_video_url ? "pb-12 pt-12" : "pt-32 pb-12 lg:pt-40"}>
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
           <Link to="/biens" className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-primary transition-colors mb-8">
             <ArrowLeft size={14} /> {t("Retour aux biens", "Back to properties")}
@@ -137,11 +156,18 @@ const BienDetail = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-4 left-4"><StatusBadge status={p.status} /></div>
-                {p.matterport_id && (
-                  <button onClick={() => setTourOpen(true)} className="absolute top-4 right-4 flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border/50 px-3 py-2 font-body text-[10px] tracking-[0.15em] uppercase text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
-                    <Play size={12} className="fill-current" /> {t("Visite 3D", "3D Tour")}
-                  </button>
-                )}
+                <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                  {p.matterport_id && (
+                    <button onClick={() => setTourOpen(true)} className="flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border/50 px-3 py-2 font-body text-[10px] tracking-[0.15em] uppercase text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+                      <Play size={12} className="fill-current" /> {t("Visite 3D", "3D Tour")}
+                    </button>
+                  )}
+                  {(p.video_url || p.video_file_url) && (
+                    <button onClick={() => setVideoOpen(true)} className="flex items-center gap-2 bg-background/80 backdrop-blur-sm border border-border/50 px-3 py-2 font-body text-[10px] tracking-[0.15em] uppercase text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+                      <Play size={12} className="fill-current" /> {t("Vidéo", "Video")}
+                    </button>
+                  )}
+                </div>
               </div>
               {allImages.length > 1 && (
                 <div className="grid grid-cols-4 gap-3">
@@ -153,6 +179,7 @@ const BienDetail = () => {
                 </div>
               )}
             </div>
+
 
             {/* Infos */}
             <div>
