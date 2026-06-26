@@ -1,119 +1,101 @@
 
-## État actuel du site
+# Mesure d'audience anonymisée — Cabinet Pietri
 
-- **Données des biens** : codées en dur dans `src/data/properties.ts` (tableau TypeScript). 4 biens (Paris, Santorin, Londres, Provence) avec champs limités : `id`, `image`, `title`, `location`, `price`, `tag`, `beds/baths/area`, `matterportId`, `category` (france/international/signature), `descriptionFr/En`, `featured`.
-- **Aucune base de données** connectée. Aucune authentification. Pas d'admin.
-- **Pages biens** : `/collection` liste tous les biens via `properties.map(...)`. Aucune page détail par bien (pas de route `/biens/:slug`).
-- **Pas de statut** (Disponible / Sous offre / Vendu / Réservé / Masqué) — seulement un `tag` éditorial.
-- **Photos** : une seule par bien (`image`). Champ `gallery` typé mais inutilisé.
-- **Catégories** orientées « France / International / Signature » — pas alignées avec « Corse / Continent / International (Bali, Monaco) ».
-- **Ajout d'un bien** : nécessite d'éditer le code (voir `docs/AJOUTER-UN-BIEN.md`).
+## Objectif
 
-## Recommandation
+Mettre en place une mesure d'audience **conforme à la recommandation CNIL "mesure d'audience exemptée de consentement"**, qui collecte des informations utiles sans bandeau cookies et sans risque RGPD.
 
-Migrer les biens vers **Lovable Cloud** (Supabase géré) avec une table `properties` + bucket storage pour les photos, et créer une **page d'administration `/admin/biens` protégée par authentification**. C'est la seule manière de répondre à votre besoin « ajouter / modifier / changer le statut sans toucher au code » de façon fiable et durable.
+## Ce qui sera collecté
 
-Alternatives écartées :
-- *Airtable* : nécessite un compte externe, ralentit le site (appels API), moins fluide pour les photos.
-- *Garder le code en dur* : ne résout pas la demande principale.
+À chaque chargement de page, une edge function enregistre :
 
-## Architecture proposée
+- **IP tronquée** (les derniers chiffres sont masqués, ex : `92.184.105.0` au lieu de `92.184.105.42`) — non-identifiante au sens CNIL
+- **Pays + ville approximative** (déduits de l'IP via les headers Cloudflare/Lovable avant troncature)
+- **Page visitée** (URL)
+- **Site d'origine** (referrer)
+- **Date/heure**
+- **Type d'appareil** (mobile / desktop) et navigateur
+- **Identifiant de session anonyme** (UUID gardé en mémoire pendant la visite, non persistant) — permet de calculer la durée et le nombre de pages par session
 
-### 1. Base de données (Lovable Cloud)
+Aucun cookie n'est déposé, aucune IP complète n'est stockée, aucun croisement avec d'autres données. Pas de profilage publicitaire.
 
-Table `properties` avec les champs demandés (tous optionnels sauf `id`, `title`, `status`) :
+## Ce qui sera construit
+
+### 1. Table `visit_logs` (Lovable Cloud)
+
+Colonnes : id, session_id, ip_truncated, country, city, page, referrer, device, browser, duration_seconds, created_at.
+
+RLS : lecture réservée aux admins (réutilisation du rôle existant). Insertion via la service_role depuis l'edge function uniquement.
+
+Purge automatique : conservation **13 mois** (recommandation CNIL), via une tâche de nettoyage déclenchée à l'insertion.
+
+### 2. Edge function `log-visit`
+
+- Reçoit l'IP via `x-forwarded-for` / `cf-connecting-ip`
+- Tronque immédiatement (IPv4 : dernier octet à 0 ; IPv6 : garde les 48 premiers bits)
+- Récupère pays/ville via les headers Cloudflare (`cf-ipcountry`, `cf-ipcity`) si disponibles, sinon via une API gratuite
+- Parse user-agent pour device + browser
+- Insère dans `visit_logs`
+
+### 3. Hook côté client `useVisitTracker`
+
+Branché dans `App.tsx` :
+- Génère un `session_id` (UUID) en mémoire au premier chargement
+- À chaque changement de route, appelle `log-visit` avec page + referrer
+- À la sortie de page, envoie la durée via `navigator.sendBeacon`
+
+### 4. Page admin `/admin/analytics`
+
+Protégée par `AdminGuard`. Affiche :
+
+- **Compteurs en-tête** : visiteurs uniques (par session_id), pages vues, durée moyenne — sur 7 / 30 / 90 jours
+- **Liste des dernières visites** : date, pays/ville, IP tronquée, page, referrer, device
+- **Top pages** consultées
+- **Top sources** (referrers)
+- **Répartition pays**
+- **Filtre par période**
+- Bouton **export CSV**
+
+Design dans la continuité de l'admin existante (Noir & Gold, Playfair / Outfit).
+
+### 5. Mention dans la politique de confidentialité
+
+Ajout d'un court paragraphe : *"Nous utilisons une mesure d'audience anonymisée, exemptée de consentement selon la recommandation de la CNIL. Les adresses IP sont tronquées immédiatement et ne permettent pas votre identification. Les statistiques sont conservées 13 mois."*
+
+Si la page n'existe pas encore, je créerai `/confidentialite` avec un lien discret dans le footer.
+
+## Détails techniques
 
 ```text
-id (uuid, pk)              slug (text, unique)
-title                      status   (disponible|sous_offre|vendu|reserve|masque)
-property_type              (appartement|maison|villa|terrain|local|programme|autre)
-region                     (corse|continent|monaco|bali|autre)
-city, sector
-price_amount (numeric), price_display (text), price_on_request (bool)
-area_m2, rooms, bedrooms, bathrooms, floor
-has_terrace, has_garden, has_balcony, has_sea_view, has_mountain_view, has_open_view
-short_description, long_description
-highlights (text[])         energy_class
-main_image_url              gallery (jsonb: [{url, alt}])
-plan_pdf_url
-internal_ref               featured (bool)   coup_de_coeur (bool)
-display_order (int)        matterport_id
-created_at, updated_at
+client (App.tsx)
+   │  useVisitTracker — UUID session en mémoire
+   │  → fetch POST /log-visit { page, referrer, session_id, device }
+   ▼
+edge function log-visit (verify_jwt=false)
+   │  - tronque IP
+   │  - lit cf-ipcountry / cf-ipcity
+   │  - parse UA
+   │  - insert via service_role
+   ▼
+table public.visit_logs (RLS: admin only)
+   ▲
+   │  read
+page /admin/analytics (AdminGuard)
 ```
 
-Table `user_roles` + enum `app_role` (admin) + fonction `has_role()` (pattern sécurisé Lovable).
+## Ce qui n'est PAS inclus
 
-Bucket storage `property-images` (public) et `property-documents` (privé).
+- Pas de bandeau cookies (inutile dans ce scénario)
+- Pas d'IP complète stockée
+- Pas de profilage individuel
+- Pas d'intégration Google Analytics / Matomo / Plausible (vous gardez la donnée chez vous)
 
-**RLS** :
-- `select` public uniquement pour `status != 'masque'`.
-- `insert/update/delete` réservés aux admins (`has_role(auth.uid(), 'admin')`).
+## Étapes d'implémentation
 
-### 2. Pages publiques (refonte)
+1. Migration : table `visit_logs`, GRANTs, RLS, policies admin
+2. Edge function `log-visit`
+3. Hook `useVisitTracker` + branchement dans `App.tsx`
+4. Page `/admin/analytics` + lien dans la sidebar admin
+5. Page `/confidentialite` (si absente) + paragraphe mesure d'audience
+6. Vérification : ouvrir le site, naviguer, vérifier que les visites apparaissent dans l'admin
 
-- **`/biens`** (nouvelle, remplace progressivement `/collection`) : grille filtrable.
-  - Filtres : région, ville, type, budget (slider), pièces, statut (« Disponibles uniquement » par défaut).
-  - Tri par défaut : disponibles → sous offre → vendus (si admin coche « montrer »).
-- **`/biens/:slug`** (nouvelle) : page détail — galerie, infos, points forts, CTA contextuel selon statut :
-  - *Disponible* → « Demander plus d'informations » (pré-rempli avec titre du bien).
-  - *Sous offre* → « Être alerté si le bien redevient disponible ».
-  - *Vendu* → « Nous consulter pour un bien similaire ».
-  - *Réservé* → « Nous contacter ».
-- **`PropertyCard`** : ajout d'un badge statut discret (texte doré sur fond translucide, pas de couleur criarde) + adaptation du CTA.
-- **`/collection`** : redirige vers `/biens` (page conservée, non supprimée).
-
-### 3. Administration `/admin/biens` (protégée)
-
-- **Auth** : email + mot de passe (Lovable Cloud). Première connexion → vous attribuer manuellement le rôle `admin` via SQL.
-- **`/admin/login`** : formulaire de connexion.
-- **`/admin/biens`** : tableau de tous les biens (y compris masqués), actions : ajouter, éditer, changer le statut en 1 clic (menu déroulant inline), masquer, dupliquer, supprimer (avec confirmation), réordonner (drag-and-drop ou champ `display_order`).
-- **`/admin/biens/nouveau`** et **`/admin/biens/:id/edit`** : formulaire complet avec uploader d'images (multi-upload + sélection de la photo principale + textes alt), uploader de PDF.
-- Lien discret « Admin » dans le footer (visible uniquement si connecté).
-
-### 4. Élargissement Corse / Continent / International
-
-- Mise à jour du hero, du manifesto et des CTA pour refléter : **Corse (cœur de métier) + Continent + International (Monaco, Bali)** au lieu de centrer uniquement la Balagne.
-- Section « Nos territoires » conservée avec Corse / Monaco / Bali, ajout d'une mention « et sur le continent ».
-- SEO : title + meta description ajustés pour ne pas se limiter à la Balagne.
-
-### 5. SEO des biens
-
-- URL : `/biens/{slug}` (ex. `/biens/villa-vue-mer-monticello`).
-- Slug généré auto depuis titre + ville si laissé vide.
-- `react-helmet-async` ajouté pour titres/descriptions par bien + JSON-LD `RealEstateListing`.
-- Title auto-généré : `{title} — {city} | Cabinet Pietri Immobilier`.
-- Alt photos = champ libre, fallback = `{title} — {city}`.
-
-### 6. Migration des biens existants
-
-Seed automatique : les 4 biens actuels (Paris, Santorin, Londres, Provence) seront insérés dans la nouvelle table avec `status = 'disponible'` et `featured = true`. Aucune donnée perdue. Le fichier `src/data/properties.ts` sera conservé en transition puis retiré une fois la migration validée.
-
-## Découpage de livraison
-
-Pour limiter le risque, je propose de livrer en **2 phases** :
-
-**Phase 1 — Fondations (à valider avant phase 2)**
-1. Activer Lovable Cloud.
-2. Créer la table `properties`, le système de rôles, les buckets, les RLS.
-3. Seed des 4 biens actuels.
-4. Refonte de la liste publique `/biens` + page détail `/biens/:slug` avec badges statut et CTA contextuels.
-5. Mise à jour du hero/SEO pour refléter Corse + Continent + International.
-
-**Phase 2 — Admin**
-6. Auth + rôle admin.
-7. Pages `/admin/login`, `/admin/biens`, formulaire ajout/édition avec upload multi-photos et PDF.
-8. Réordonnancement, duplication, suppression.
-
-## Ce qui ne changera pas
-
-- Identité visuelle (palette Noir & Or, Playfair / Outfit, ratio 3/4, animations).
-- Pages existantes (Philosophie, Destinations, Services, Notre histoire, Contact) conservées.
-- Bilingue FR/EN maintenu sur tout le nouveau contenu.
-
-## Confirmation demandée
-
-Pour démarrer la **Phase 1**, j'ai besoin de votre accord sur :
-
-1. **Activer Lovable Cloud** (backend géré, sans compte externe à créer).
-2. **Email admin** que vous utiliserez pour vous connecter à `/admin/biens` (vous pourrez le créer vous-même au moment voulu, je préparerai le bouton d'attribution du rôle).
-3. **Les 4 biens actuels** doivent-ils être conservés tels quels comme exemples, ou remplacés par vos vrais biens dès la migration ?

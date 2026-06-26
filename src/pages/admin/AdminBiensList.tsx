@@ -59,7 +59,10 @@ const AdminBiensList = () => {
             <span className="font-body text-[11px] tracking-[0.3em] uppercase text-primary block mb-2">Administration</span>
             <h1 className="font-display text-4xl text-foreground">Gestion des biens</h1>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap">
+            <Link to="/admin/analytics" className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase px-6 py-3 border border-border text-foreground hover:border-primary transition-colors">
+              Audience
+            </Link>
             <Link to="/admin/biens/nouveau" className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase px-6 py-3 bg-primary text-primary-foreground hover:bg-gold-light transition-colors">
               <Plus size={14} /> Ajouter un bien
             </Link>

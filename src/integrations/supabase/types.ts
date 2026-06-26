@@ -164,6 +164,48 @@ export type Database = {
         }
         Relationships: []
       }
+      visit_logs: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device: string | null
+          duration_seconds: number | null
+          id: string
+          ip_truncated: string | null
+          page: string
+          referrer: string | null
+          session_id: string
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          duration_seconds?: number | null
+          id?: string
+          ip_truncated?: string | null
+          page: string
+          referrer?: string | null
+          session_id: string
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          duration_seconds?: number | null
+          id?: string
+          ip_truncated?: string | null
+          page?: string
+          referrer?: string | null
+          session_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -177,6 +219,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      purge_old_visit_logs: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin"
