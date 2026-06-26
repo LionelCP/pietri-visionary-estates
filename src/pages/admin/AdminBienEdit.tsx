@@ -153,6 +153,19 @@ const AdminBienEdit = () => {
     set("gallery", newGallery);
   };
 
+  const handleVideoUpload = async (file: File, kind: "main" | "hero") => {
+    if (file.size > 80 * 1024 * 1024) {
+      toast({ title: "Fichier trop volumineux", description: "Limite indicative : 50 Mo. Compressez la vidéo (HandBrake, export web).", variant: "destructive" });
+      return;
+    }
+    setVideoUploading(kind);
+    const url = await uploadFile(file, "videos");
+    setVideoUploading(null);
+    if (!url) return;
+    if (kind === "main") set("video_file_url", url);
+    else set("hero_video_url", url);
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
