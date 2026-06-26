@@ -9,6 +9,14 @@ import { fetchPropertyBySlug, formatLocation, formatPrice, type Property } from 
 import { useLanguage } from "@/i18n/LanguageContext";
 import placeholder from "@/assets/hero-collection.jpg";
 
+const getEmbedUrl = (url: string): string | null => {
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&rel=0`;
+  const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) return `https://player.vimeo.com/video/${vm[1]}?autoplay=1`;
+  return null;
+};
+
 const BienDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { lang } = useLanguage();
