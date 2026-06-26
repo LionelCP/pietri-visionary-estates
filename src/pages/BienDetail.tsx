@@ -249,6 +249,21 @@ const BienDetail = () => {
       {p.matterport_id && (
         <VirtualTourViewer matterportId={p.matterport_id} title={p.title} isOpen={tourOpen} onClose={() => setTourOpen(false)} />
       )}
+
+      {videoOpen && (p.video_url || p.video_file_url) && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm p-6" onClick={() => setVideoOpen(false)}>
+          <div className="relative w-full max-w-5xl aspect-video" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setVideoOpen(false)} aria-label="Fermer" className="absolute -top-10 right-0 font-body text-xs tracking-[0.2em] uppercase text-foreground hover:text-primary">
+              {t("Fermer", "Close")} ✕
+            </button>
+            {p.video_url && getEmbedUrl(p.video_url) ? (
+              <iframe src={getEmbedUrl(p.video_url)!} title={p.title} className="w-full h-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
+            ) : p.video_file_url ? (
+              <video src={p.video_file_url} controls autoPlay className="w-full h-full object-contain bg-black" />
+            ) : null}
+          </div>
+        </div>
+      )}
     </main>
   );
 };
