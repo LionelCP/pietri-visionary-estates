@@ -13,12 +13,12 @@ export const translations = {
     contact: { fr: "Contact", en: "Contact" },
   },
   hero: {
-    overline: { fr: "Cabinet Pietri Immobilier", en: "Cabinet Pietri Real Estate" },
+    overline: { fr: "CABINET PIETRI IMMOBILIER", en: "CABINET PIETRI REAL ESTATE" },
     title1: { fr: "Des lieux pour vivre.", en: "Places to live." },
     title2: { fr: "Des projets pour durer.", en: "Projects that last." },
     description: {
-      fr: "Derrière chaque projet immobilier, il y a une histoire. Une famille qui s'agrandit, un retour aux sources, un bien à transmettre, une résidence à révéler, un investissement pour demain. Depuis plus de 15 ans, nous accompagnons vendeurs, acquéreurs et investisseurs avec une conviction simple : les plus belles transactions commencent toujours par une rencontre.",
-      en: "Behind every real estate project, there is a story. A growing family, a return to one's roots, a property to pass on, a home to reveal, an investment for tomorrow. For more than 15 years, we have guided sellers, buyers and investors with a simple conviction: the finest transactions always begin with a meeting.",
+      fr: "Derrière chaque projet immobilier, il y a une histoire.\nUne famille qui s'agrandit.\nUn retour aux sources.\nUn bien à transmettre.\nUne résidence à révéler.\nUn investissement pour demain.\n\nDepuis plus de 15 ans, nous accompagnons vendeurs, acquéreurs et investisseurs avec une conviction simple : les plus belles transactions commencent toujours par une rencontre.",
+      en: "Behind every real estate project, there is a story.\nA growing family.\nA return to one's roots.\nA property to pass on.\nA home to reveal.\nAn investment for tomorrow.\n\nFor more than 15 years, we have guided sellers, buyers and investors with a simple conviction: the finest transactions always begin with a meeting.",
     },
     cta1: { fr: "Découvrir nos biens", en: "Discover our properties" },
     cta2: { fr: "Échanger avec nous", en: "Talk with us" },
@@ -107,8 +107,8 @@ export const translations = {
   manifesto: {
     overline: { fr: "Une histoire de famille", en: "A family story" },
     quote: {
-      fr: "\"Cabinet Pietri est avant tout une entreprise familiale.\"",
-      en: "\"Cabinet Pietri is first and foremost a family business.\"",
+      fr: "Cabinet Pietri est avant tout une entreprise familiale.",
+      en: "Cabinet Pietri is first and foremost a family business.",
     },
     description: {
       fr: "Fondé par Lionel et Christelle Pietri, le cabinet réunit deux sensibilités complémentaires : la connaissance technique du bien immobilier et l'accompagnement humain des projets de vie. Depuis une quinzaine d'années, nous accompagnons vendeurs, acquéreurs et investisseurs avec la même exigence : écouter, comprendre, conseiller justement et valoriser chaque lieu avec attention. Notre approche est indépendante, engagée et profondément ancrée dans la relation. Parce qu'un projet immobilier n'est jamais seulement une transaction : c'est souvent un changement de vie, une transmission, un retour aux sources ou un nouveau départ.",
