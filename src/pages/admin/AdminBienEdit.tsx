@@ -183,9 +183,12 @@ const AdminBienEdit = () => {
       seo_description: f.seo_description.trim() || null,
     };
 
+    // gallery is JSONB → cast to satisfy generated Json type
+    const dbPayload = { ...payload, gallery: payload.gallery as unknown as never };
+
     const res = isNew
-      ? await supabase.from("properties").insert(payload).select("id").single()
-      : await supabase.from("properties").update(payload).eq("id", id!).select("id").single();
+      ? await supabase.from("properties").insert(dbPayload).select("id").single()
+      : await supabase.from("properties").update(dbPayload).eq("id", id!).select("id").single();
 
     setSaving(false);
     if (res.error) {
