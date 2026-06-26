@@ -77,6 +77,9 @@ const AdminBienEdit = () => {
   const [saving, setSaving] = useState(false);
   const mainFileRef = useRef<HTMLInputElement>(null);
   const galleryFileRef = useRef<HTMLInputElement>(null);
+  const videoFileRef = useRef<HTMLInputElement>(null);
+  const heroVideoFileRef = useRef<HTMLInputElement>(null);
+  const [videoUploading, setVideoUploading] = useState<"main" | "hero" | null>(null);
 
   useEffect(() => {
     if (isNew) return;
