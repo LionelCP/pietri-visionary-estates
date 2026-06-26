@@ -23,6 +23,7 @@ export type Database = {
           coup_de_coeur: boolean
           created_at: string
           display_order: number
+          drone_video_url: string | null
           energy_class: string | null
           featured: boolean
           floor: string | null
@@ -53,12 +54,17 @@ export type Database = {
           seo_title: string | null
           short_description: string | null
           short_description_en: string | null
+          show_video: boolean
+          show_virtual_tour: boolean
           slug: string
           status: Database["public"]["Enums"]["property_status"]
           title: string
           updated_at: string
           video_file_url: string | null
           video_url: string | null
+          video_url_2: string | null
+          virtual_tour_iframe: string | null
+          virtual_tour_url: string | null
         }
         Insert: {
           area_m2?: number | null
@@ -68,6 +74,7 @@ export type Database = {
           coup_de_coeur?: boolean
           created_at?: string
           display_order?: number
+          drone_video_url?: string | null
           energy_class?: string | null
           featured?: boolean
           floor?: string | null
@@ -98,12 +105,17 @@ export type Database = {
           seo_title?: string | null
           short_description?: string | null
           short_description_en?: string | null
+          show_video?: boolean
+          show_virtual_tour?: boolean
           slug: string
           status?: Database["public"]["Enums"]["property_status"]
           title: string
           updated_at?: string
           video_file_url?: string | null
           video_url?: string | null
+          video_url_2?: string | null
+          virtual_tour_iframe?: string | null
+          virtual_tour_url?: string | null
         }
         Update: {
           area_m2?: number | null
@@ -113,6 +125,7 @@ export type Database = {
           coup_de_coeur?: boolean
           created_at?: string
           display_order?: number
+          drone_video_url?: string | null
           energy_class?: string | null
           featured?: boolean
           floor?: string | null
@@ -143,12 +156,17 @@ export type Database = {
           seo_title?: string | null
           short_description?: string | null
           short_description_en?: string | null
+          show_video?: boolean
+          show_virtual_tour?: boolean
           slug?: string
           status?: Database["public"]["Enums"]["property_status"]
           title?: string
           updated_at?: string
           video_file_url?: string | null
           video_url?: string | null
+          video_url_2?: string | null
+          virtual_tour_iframe?: string | null
+          virtual_tour_url?: string | null
         }
         Relationships: []
       }

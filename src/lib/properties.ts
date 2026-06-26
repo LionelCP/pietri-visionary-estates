@@ -47,8 +47,14 @@ export interface Property {
   display_order: number;
   matterport_id: string | null;
   video_url: string | null;
+  video_url_2: string | null;
   video_file_url: string | null;
   hero_video_url: string | null;
+  drone_video_url: string | null;
+  virtual_tour_url: string | null;
+  virtual_tour_iframe: string | null;
+  show_video: boolean;
+  show_virtual_tour: boolean;
   seo_title: string | null;
   seo_description: string | null;
   created_at: string;
