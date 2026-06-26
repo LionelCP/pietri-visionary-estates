@@ -52,9 +52,14 @@ const Footer = () => {
           </div>
         </div>
         <div className="line-gold mt-16 mb-8" />
-        <p className="font-body text-xs text-muted-foreground tracking-wider text-center">
-          © 2026 Cabinet Pietri — {t(translations.footer.rights)}
-        </p>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6">
+          <p className="font-body text-xs text-muted-foreground tracking-wider">
+            © 2026 Cabinet Pietri — {t(translations.footer.rights)}
+          </p>
+          <Link to="/confidentialite" className="font-body text-xs text-muted-foreground hover:text-foreground tracking-wider transition-colors">
+            Politique de confidentialité
+          </Link>
+        </div>
       </div>
     </footer>
   );
