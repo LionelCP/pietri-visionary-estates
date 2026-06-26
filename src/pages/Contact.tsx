@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import PageHero from "@/components/PageHero";
+import heroCollection from "@/assets/hero-collection.jpg";
 import { useLanguage } from "@/i18n/LanguageContext";
+
 
 const content = {
   overline: { fr: "Contact", en: "Contact" },
