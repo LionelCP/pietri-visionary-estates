@@ -115,8 +115,14 @@ const AdminBienEdit = () => {
         display_order: p.display_order.toString(),
         matterport_id: p.matterport_id ?? "",
         video_url: p.video_url ?? "",
+        video_url_2: p.video_url_2 ?? "",
         video_file_url: p.video_file_url ?? "",
         hero_video_url: p.hero_video_url ?? "",
+        drone_video_url: p.drone_video_url ?? "",
+        virtual_tour_url: p.virtual_tour_url ?? "",
+        virtual_tour_iframe: p.virtual_tour_iframe ?? "",
+        show_video: p.show_video ?? true,
+        show_virtual_tour: p.show_virtual_tour ?? true,
         seo_title: p.seo_title ?? "", seo_description: p.seo_description ?? "",
       });
       setLoading(false);
