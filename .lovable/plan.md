@@ -1,101 +1,64 @@
 
-# Mesure d'audience anonymisée — Cabinet Pietri
+# Plan — Vidéos sur les fiches de biens + guide admin à jour
 
-## Objectif
+## 1. Réécrire `docs/AJOUTER-UN-BIEN.md`
 
-Mettre en place une mesure d'audience **conforme à la recommandation CNIL "mesure d'audience exemptée de consentement"**, qui collecte des informations utiles sans bandeau cookies et sans risque RGPD.
+Remplacer entièrement l'ancien guide (basé sur le fichier `properties.ts`, **plus utilisé**) par un guide qui reflète le vrai process via l'admin Lovable Cloud.
 
-## Ce qui sera collecté
+Le nouveau guide couvrira :
+- Connexion à l'admin (`/admin/login`)
+- Ajouter un bien depuis `/admin/biens` → « Ajouter un bien »
+- Détail de chaque section du formulaire (identité, localisation, prix, caractéristiques, descriptions FR/EN, photos, visite Matterport, **vidéos**, options)
+- Mettre à jour un bien
+- Statuts (Disponible / Sous offre / Réservé / Vendu / Masqué) et leur effet sur le site public
+- Visites virtuelles Matterport (récupération de l'ID)
+- Vidéos (les 3 nouveaux champs)
+- Astuces (prix sur demande, retirer sans supprimer, ordre d'affichage, coup de cœur, mise en avant)
 
-À chaque chargement de page, une edge function enregistre :
+## 2. Ajouter le support vidéo en base
 
-- **IP tronquée** (les derniers chiffres sont masqués, ex : `92.184.105.0` au lieu de `92.184.105.42`) — non-identifiante au sens CNIL
-- **Pays + ville approximative** (déduits de l'IP via les headers Cloudflare/Lovable avant troncature)
-- **Page visitée** (URL)
-- **Site d'origine** (referrer)
-- **Date/heure**
-- **Type d'appareil** (mobile / desktop) et navigateur
-- **Identifiant de session anonyme** (UUID gardé en mémoire pendant la visite, non persistant) — permet de calculer la durée et le nombre de pages par session
+Migration Supabase sur la table `properties` — 3 nouveaux champs :
 
-Aucun cookie n'est déposé, aucune IP complète n'est stockée, aucun croisement avec d'autres données. Pas de profilage publicitaire.
+| Champ | Type | Usage |
+|---|---|---|
+| `video_url` | text | URL YouTube ou Vimeo (lecteur intégré dans la galerie) |
+| `video_file_url` | text | URL d'un MP4 uploadé dans Lovable Cloud |
+| `hero_video_url` | text | Vidéo aérienne/drone diffusée en haut de la fiche, autoplay muet en boucle |
 
-## Ce qui sera construit
+Tous optionnels (`null` par défaut). Pas de breaking change.
 
-### 1. Table `visit_logs` (Lovable Cloud)
+## 3. Étendre l'admin (`AdminBienEdit.tsx`)
 
-Colonnes : id, session_id, ip_truncated, country, city, page, referrer, device, browser, duration_seconds, created_at.
+Nouvelle section **« Vidéos »** dans le formulaire, après la section Photos :
 
-RLS : lecture réservée aux admins (réutilisation du rôle existant). Insertion via la service_role depuis l'edge function uniquement.
+- **Lien YouTube / Vimeo** : champ texte (URL). Détection auto du provider et de l'ID pour le lecteur embed.
+- **Vidéo MP4 (upload)** : bouton upload vers le bucket `property-images` (sous-dossier `videos/`). Limite indicative 50 Mo affichée. Aperçu + bouton « Retirer ».
+- **Vidéo hero (drone)** : champ URL (recommandation : lien direct MP4 hébergé, ou Vimeo). Note explicative sur format conseillé (16:9, < 15 s, muet).
 
-Purge automatique : conservation **13 mois** (recommandation CNIL), via une tâche de nettoyage déclenchée à l'insertion.
+Mise à jour du payload de sauvegarde pour inclure les 3 champs.
 
-### 2. Edge function `log-visit`
+## 4. Étendre l'affichage public (`BienDetail.tsx`)
 
-- Reçoit l'IP via `x-forwarded-for` / `cf-connecting-ip`
-- Tronque immédiatement (IPv4 : dernier octet à 0 ; IPv6 : garde les 48 premiers bits)
-- Récupère pays/ville via les headers Cloudflare (`cf-ipcountry`, `cf-ipcity`) si disponibles, sinon via une API gratuite
-- Parse user-agent pour device + browser
-- Insère dans `visit_logs`
+- **Hero vidéo** : si `hero_video_url` est renseigné, remplacer la première image de couverture par une `<video autoplay muted loop playsinline>` (avec fallback image principale si erreur de chargement).
+- **Galerie** : si `video_url` (YouTube/Vimeo) → insérer une vignette « ▶ Vidéo » qui ouvre un lecteur embed dans la lightbox existante.
+- **Vidéo MP4** : si `video_file_url` → afficher un player HTML5 natif dans la galerie.
+- Conserver le bouton Matterport existant inchangé.
 
-### 3. Hook côté client `useVisitTracker`
+Ajouter un petit helper `getEmbedUrl()` pour transformer une URL YouTube/Vimeo en URL d'iframe embed.
 
-Branché dans `App.tsx` :
-- Génère un `session_id` (UUID) en mémoire au premier chargement
-- À chaque changement de route, appelle `log-visit` avec page + referrer
-- À la sortie de page, envoie la durée via `navigator.sendBeacon`
+## 5. Mettre à jour les types
 
-### 4. Page admin `/admin/analytics`
-
-Protégée par `AdminGuard`. Affiche :
-
-- **Compteurs en-tête** : visiteurs uniques (par session_id), pages vues, durée moyenne — sur 7 / 30 / 90 jours
-- **Liste des dernières visites** : date, pays/ville, IP tronquée, page, referrer, device
-- **Top pages** consultées
-- **Top sources** (referrers)
-- **Répartition pays**
-- **Filtre par période**
-- Bouton **export CSV**
-
-Design dans la continuité de l'admin existante (Noir & Gold, Playfair / Outfit).
-
-### 5. Mention dans la politique de confidentialité
-
-Ajout d'un court paragraphe : *"Nous utilisons une mesure d'audience anonymisée, exemptée de consentement selon la recommandation de la CNIL. Les adresses IP sont tronquées immédiatement et ne permettent pas votre identification. Les statistiques sont conservées 13 mois."*
-
-Si la page n'existe pas encore, je créerai `/confidentialite` avec un lien discret dans le footer.
+- `src/lib/properties.ts` : ajouter les 3 champs à l'interface `Property`.
+- Les types Supabase générés se mettent à jour automatiquement après la migration.
 
 ## Détails techniques
 
-```text
-client (App.tsx)
-   │  useVisitTracker — UUID session en mémoire
-   │  → fetch POST /log-visit { page, referrer, session_id, device }
-   ▼
-edge function log-visit (verify_jwt=false)
-   │  - tronque IP
-   │  - lit cf-ipcountry / cf-ipcity
-   │  - parse UA
-   │  - insert via service_role
-   ▼
-table public.visit_logs (RLS: admin only)
-   ▲
-   │  read
-page /admin/analytics (AdminGuard)
-```
+- **Stockage MP4** : bucket `property-images` existant (déjà privé avec policy publique en lecture via getPublicUrl). Sous-dossier `videos/` pour organisation.
+- **Détection provider vidéo** : regex simple sur l'URL (`youtube.com/watch?v=`, `youtu.be/`, `vimeo.com/`).
+- **Hero vidéo** : `preload="metadata"`, `poster={main_image_url}` pour éviter un flash blanc avant le chargement. Sur mobile (< 768px) on garde l'image fixe pour économiser la data.
+- **Pas de transcodage** : on assume que l'utilisateur uploade un MP4 H.264 prêt pour le web. Une note dans le guide recommande HandBrake ou un export « web » depuis l'éditeur vidéo.
 
-## Ce qui n'est PAS inclus
+## Hors scope (à confirmer si besoin)
 
-- Pas de bandeau cookies (inutile dans ce scénario)
-- Pas d'IP complète stockée
-- Pas de profilage individuel
-- Pas d'intégration Google Analytics / Matomo / Plausible (vous gardez la donnée chez vous)
-
-## Étapes d'implémentation
-
-1. Migration : table `visit_logs`, GRANTs, RLS, policies admin
-2. Edge function `log-visit`
-3. Hook `useVisitTracker` + branchement dans `App.tsx`
-4. Page `/admin/analytics` + lien dans la sidebar admin
-5. Page `/confidentialite` (si absente) + paragraphe mesure d'audience
-6. Vérification : ouvrir le site, naviguer, vérifier que les visites apparaissent dans l'admin
-
+- Pas de génération automatique de poster depuis la vidéo (resterait à l'utilisateur de bien renseigner la photo principale).
+- Pas de gestion multi-vidéos (1 lien + 1 fichier + 1 hero par bien — suffisant pour l'usage actuel).
