@@ -15,6 +15,7 @@ import BienDetail from "./pages/BienDetail";
 import Destinations from "./pages/Destinations";
 import Signature from "./pages/Signature";
 import Services from "./pages/Services";
+import Acheter from "./pages/Acheter";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -51,6 +52,8 @@ const App = () => (
               <Route path="/destinations" element={<Destinations />} />
               <Route path="/signature" element={<Signature />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/vendre" element={<Services />} />
+              <Route path="/acheter" element={<Acheter />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/confidentialite" element={<Confidentialite />} />
