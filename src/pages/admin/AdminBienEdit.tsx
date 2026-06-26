@@ -557,9 +557,9 @@ const AdminBienEdit = () => {
           {/* Section: extras */}
           <section className="space-y-5">
             <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Extras & SEO</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div><label className={labelCls}>ID Matterport (visite 3D)</label><input value={f.matterport_id} onChange={(e) => set("matterport_id", e.target.value)} className={inputCls} /></div>
-              <div><label className={labelCls}>URL du plan PDF</label><input value={f.plan_pdf_url} onChange={(e) => set("plan_pdf_url", e.target.value)} className={inputCls} /></div>
+            <div>
+              <label className={labelCls}>URL du plan PDF</label>
+              <input value={f.plan_pdf_url} onChange={(e) => set("plan_pdf_url", e.target.value)} className={inputCls} />
             </div>
             <div className="flex flex-wrap gap-6">
               <label className={checkCls}>
