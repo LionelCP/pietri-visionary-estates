@@ -48,6 +48,9 @@ interface FormState {
   coup_de_coeur: boolean;
   display_order: string;
   matterport_id: string;
+  video_url: string;
+  video_file_url: string;
+  hero_video_url: string;
   seo_title: string;
   seo_description: string;
 }
