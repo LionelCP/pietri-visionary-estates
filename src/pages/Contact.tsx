@@ -69,7 +69,8 @@ const Contact = () => {
 
   return (
     <main>
-      <PageHero overline={t(content.overline)} title={t(content.title)} />
+      <PageHero image={heroCollection} overline={t(content.overline)} title={t(content.title)} breadcrumbs={[{ label: t(content.overline) }]} />
+
 
       <section className="py-20 lg:py-28">
         <div className="max-w-[1100px] mx-auto px-6 lg:px-12">
