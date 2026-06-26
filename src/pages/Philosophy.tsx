@@ -196,7 +196,7 @@ const Philosophy = () => {
             viewport={{ once: true }}
             className="space-y-4"
           >
-            {t(content.intro).map((line, i) => (
+            {arr(content.intro).map((line, i) => (
               <p
                 key={i}
                 className="font-display text-2xl md:text-3xl text-foreground leading-snug"
@@ -226,7 +226,7 @@ const Philosophy = () => {
                     {t(s.lead)}
                   </p>
                 )}
-                {t(s.paragraphs).map((para, i) => (
+                {arr(s.paragraphs).map((para, i) => (
                   <p
                     key={i}
                     className="font-body text-base md:text-lg text-muted-foreground leading-relaxed"
@@ -274,7 +274,7 @@ const Philosophy = () => {
             <h2 className="font-display text-3xl md:text-4xl text-foreground">
               {t(content.closing.title)}
             </h2>
-            {t(content.closing.paragraphs).map((para, i) => (
+            {arr(content.closing.paragraphs).map((para, i) => (
               <p
                 key={i}
                 className="font-display text-xl md:text-2xl italic text-foreground leading-relaxed max-w-[680px] mx-auto"
