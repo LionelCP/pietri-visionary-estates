@@ -41,6 +41,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <Navbar />
+            <VisitTracker />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/philosophy" element={<Philosophy />} />
@@ -52,11 +53,13 @@ const App = () => (
               <Route path="/services" element={<Services />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/confidentialite" element={<Confidentialite />} />
 
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/biens" element={<AdminGuard><AdminBiensList /></AdminGuard>} />
               <Route path="/admin/biens/nouveau" element={<AdminGuard><AdminBienEdit /></AdminGuard>} />
               <Route path="/admin/biens/:id/edit" element={<AdminGuard><AdminBienEdit /></AdminGuard>} />
+              <Route path="/admin/analytics" element={<AdminGuard><AdminAnalytics /></AdminGuard>} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
