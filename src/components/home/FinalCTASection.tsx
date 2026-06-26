@@ -6,11 +6,10 @@ const FinalCTASection = () => {
   const { t } = useLanguage();
   const c = translations.finalCta;
 
-  const ctas = [
-    { label: t(c.project), href: "/contact", primary: true },
-    { label: t(c.estimate), href: "/contact?intent=estimation" },
-    { label: t(c.browse), href: "/collection" },
-    { label: t(c.callback), href: "/contact?intent=callback" },
+  const cards = [
+    { ...c.sellers, href: "/contact?intent=vendre" },
+    { ...c.buyers, href: "/contact?intent=acheter" },
+    { ...c.investors, href: "/contact?intent=investir" },
   ];
 
   return (
@@ -21,33 +20,52 @@ const FinalCTASection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl mx-auto text-center"
+          className="max-w-3xl mx-auto text-center mb-16 lg:mb-20"
         >
           <span className="font-body text-[11px] tracking-[0.3em] uppercase text-primary block mb-6">
             {t(c.overline)}
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight mb-6">
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight">
             {t(c.title)}
           </h2>
-          <p className="font-body text-sm md:text-base text-muted-foreground leading-relaxed mb-12">
-            {t(c.subtitle)}
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {ctas.map((cta) => (
-              <a
-                key={cta.label}
-                href={cta.href}
-                className={`inline-flex items-center justify-center font-body text-xs tracking-[0.2em] uppercase px-8 py-4 transition-colors duration-300 ${
-                  cta.primary
-                    ? "bg-primary text-primary-foreground hover:bg-gold-light"
-                    : "border border-foreground/30 text-foreground hover:border-primary hover:text-primary"
-                }`}
-              >
-                {cta.label}
-              </a>
-            ))}
-          </div>
         </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border">
+          {cards.map((card, i) => (
+            <motion.article
+              key={card.title.fr}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.12 }}
+              className="bg-secondary p-10 lg:p-12 flex flex-col"
+            >
+              <h3 className="font-display text-2xl lg:text-3xl text-foreground mb-5 leading-tight">
+                {t(card.title)}
+              </h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed mb-8 flex-1">
+                {t(card.desc)}
+              </p>
+              <a
+                href={card.href}
+                className="inline-flex items-center font-body text-xs tracking-[0.2em] uppercase text-primary hover:text-gold-light transition-colors duration-300 gap-3 self-start"
+              >
+                {t(card.cta)}
+                <span className="w-6 h-px bg-primary" />
+              </a>
+            </motion.article>
+          ))}
+        </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="font-display italic text-xl lg:text-2xl text-foreground text-center max-w-3xl mx-auto mt-20 lg:mt-24 leading-relaxed"
+        >
+          {t(c.closing)}
+        </motion.p>
       </div>
     </section>
   );

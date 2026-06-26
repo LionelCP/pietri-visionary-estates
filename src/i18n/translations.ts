@@ -93,17 +93,38 @@ export const translations = {
     ],
   },
   finalCta: {
-    overline: { fr: "Parlons de votre projet", en: "Let's talk about your project" },
-    title: { fr: "Un projet immobilier en Corse ? Échangeons.", en: "A real estate project in Corsica? Let's talk." },
-    subtitle: {
-      fr: "Vendre, acheter, investir ou simplement faire le point sur la valeur de votre bien : nous prenons le temps de vous écouter.",
-      en: "Selling, buying, investing — or simply assessing the value of your property: we take the time to listen.",
+    overline: { fr: "Votre histoire", en: "Your story" },
+    title: { fr: "Et vous, quel est votre projet ?", en: "And you, what is your project?" },
+    closing: {
+      fr: "Nous croyons que certains lieux nous choisissent autant que nous les choisissons. Notre rôle est de rendre cette rencontre possible, avec écoute, exigence et justesse.",
+      en: "We believe that some places choose us as much as we choose them. Our role is to make that meeting possible, with attentive listening, exacting standards and rightness.",
     },
-    project: { fr: "Parler de mon projet", en: "Discuss my project" },
-    estimate: { fr: "Estimer mon bien", en: "Estimate my property" },
-    browse: { fr: "Découvrir les biens disponibles", en: "Browse available properties" },
-    callback: { fr: "Être rappelé", en: "Request a callback" },
+    sellers: {
+      title: { fr: "Vous vendez", en: "You are selling" },
+      desc: {
+        fr: "Votre bien porte une histoire. Nous vous aidons à le présenter avec justesse, élégance et sensibilité, pour rencontrer le bon acquéreur.",
+        en: "Your property carries a story. We help you present it with rightness, elegance and sensitivity, to meet the right buyer.",
+      },
+      cta: { fr: "Confier mon bien", en: "Entrust my property" },
+    },
+    buyers: {
+      title: { fr: "Vous achetez", en: "You are buying" },
+      desc: {
+        fr: "Résidence principale, maison de vacances, retour aux sources ou investissement plaisir : nous vous accompagnons dans la recherche d'un lieu qui vous ressemble.",
+        en: "Primary residence, holiday home, return to your roots or a pleasure investment: we guide you in the search for a place that resembles you.",
+      },
+      cta: { fr: "Nous parler de votre recherche", en: "Tell us about your search" },
+    },
+    investors: {
+      title: { fr: "Vous investissez", en: "You are investing" },
+      desc: {
+        fr: "Investir dans la pierre, c'est aussi construire, transmettre et sécuriser un projet dans le temps. Nous vous aidons à identifier des biens cohérents avec vos objectifs.",
+        en: "Investing in real estate also means building, passing on and securing a project over time. We help you identify properties aligned with your goals.",
+      },
+      cta: { fr: "Échanger sur mon projet", en: "Discuss my project" },
+    },
   },
+
   manifesto: {
     overline: { fr: "Une histoire de famille", en: "A family story" },
     quote: {
