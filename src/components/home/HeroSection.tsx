@@ -10,7 +10,7 @@ const HeroSection = () => {
   return (
     <section className="relative h-screen overflow-hidden">
       <div className="absolute inset-0">
-        <img src={heroImage} alt="Luxury Mediterranean villa at dusk" width={1920} height={1080} className="w-full h-full object-cover animate-ken-burns" />
+        <img src={heroImage} alt="Villa de prestige en Balagne, Corse — Cabinet Pietri Immobilier" width={1920} height={1080} className="w-full h-full object-cover animate-ken-burns" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
       </div>
