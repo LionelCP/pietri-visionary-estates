@@ -24,7 +24,7 @@ const HeroSection = () => {
             <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7 }} className="font-display text-4xl md:text-5xl lg:text-7xl text-foreground leading-[1.1] mb-8">
               {t(h.title1)}<br /><span className="italic text-primary">{t(h.title2)}</span>
             </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }} className="font-body text-base md:text-lg text-cream-muted leading-relaxed mb-10 max-w-lg">
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.9 }} className="font-body text-base md:text-lg text-cream-muted leading-relaxed mb-10 max-w-lg whitespace-pre-line">
               {t(h.description)}
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.1 }} className="flex flex-col sm:flex-row gap-4">
