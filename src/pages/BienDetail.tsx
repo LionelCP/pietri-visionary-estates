@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
 import VirtualTourViewer from "@/components/VirtualTourViewer";
 import StatusBadge from "@/components/StatusBadge";
+import PropertyMediaSection from "@/components/PropertyMediaSection";
 import { fetchPropertyBySlug, formatLocation, formatPrice, type Property } from "@/lib/properties";
 import { useLanguage } from "@/i18n/LanguageContext";
 import placeholder from "@/assets/hero-collection.jpg";
