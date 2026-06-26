@@ -13,15 +13,15 @@ export const translations = {
     contact: { fr: "Contact", en: "Contact" },
   },
   hero: {
-    overline: { fr: "Cabinet Pietri Immobilier — Corse, Continent & International", en: "Cabinet Pietri Real Estate — Corsica, France & International" },
-    title1: { fr: "Immobilier en Corse,", en: "Real estate in Corsica," },
-    title2: { fr: "sur le continent et à l'international.", en: "on the mainland and internationally." },
+    overline: { fr: "Cabinet Pietri Immobilier", en: "Cabinet Pietri Real Estate" },
+    title1: { fr: "Des lieux pour vivre.", en: "Places to live." },
+    title2: { fr: "Des projets pour durer.", en: "Projects that last." },
     description: {
-      fr: "Cabinet Pietri Immobilier accompagne propriétaires, acquéreurs et investisseurs dans leurs projets immobiliers — principalement en Corse (Balagne, L'Île-Rousse, Monticello), sur le continent, à Monaco et à Bali — avec une approche locale, patrimoniale et humaine.",
-      en: "Cabinet Pietri Real Estate guides owners, buyers and investors in their property projects — mainly in Corsica (Balagne, L'Île-Rousse, Monticello), on the French mainland, in Monaco and in Bali — with a local, patrimonial and human approach.",
+      fr: "Derrière chaque projet immobilier, il y a une histoire. Une famille qui s'agrandit, un retour aux sources, un bien à transmettre, une résidence à révéler, un investissement pour demain. Depuis plus de 15 ans, nous accompagnons vendeurs, acquéreurs et investisseurs avec une conviction simple : les plus belles transactions commencent toujours par une rencontre.",
+      en: "Behind every real estate project, there is a story. A growing family, a return to one's roots, a property to pass on, a home to reveal, an investment for tomorrow. For more than 15 years, we have guided sellers, buyers and investors with a simple conviction: the finest transactions always begin with a meeting.",
     },
-    cta1: { fr: "Parler de mon projet", en: "Discuss my project" },
-    cta2: { fr: "Découvrir les biens disponibles", en: "Browse available properties" },
+    cta1: { fr: "Découvrir nos biens", en: "Discover our properties" },
+    cta2: { fr: "Échanger avec nous", en: "Talk with us" },
     scroll: { fr: "Défiler", en: "Scroll" },
   },
   services: {
@@ -111,21 +111,21 @@ export const translations = {
       en: "\"Cabinet Pietri is first and foremost a family business.\"",
     },
     description: {
-      fr: "Fondé par Lionel et Christelle Pietri, le cabinet réunit deux expertises complémentaires : l'expertise immobilière et la transaction. Depuis 2014, nous accompagnons nos clients avec la même conviction : privilégier la qualité de la relation, la justesse du conseil et une connaissance approfondie du marché. Une approche indépendante, humaine et engagée, au service de projets qui méritent toute notre attention.",
-      en: "Founded by Lionel and Christelle Pietri, the firm brings together two complementary areas of expertise: real estate appraisal and transactions. Since 2014, we have guided our clients with the same conviction: prioritizing the quality of the relationship, the accuracy of advice and a deep knowledge of the market. An independent, human and committed approach, serving projects that deserve our full attention.",
+      fr: "Fondé par Lionel et Christelle Pietri, le cabinet réunit deux sensibilités complémentaires : la connaissance technique du bien immobilier et l'accompagnement humain des projets de vie. Depuis une quinzaine d'années, nous accompagnons vendeurs, acquéreurs et investisseurs avec la même exigence : écouter, comprendre, conseiller justement et valoriser chaque lieu avec attention. Notre approche est indépendante, engagée et profondément ancrée dans la relation. Parce qu'un projet immobilier n'est jamais seulement une transaction : c'est souvent un changement de vie, une transmission, un retour aux sources ou un nouveau départ.",
+      en: "Founded by Lionel and Christelle Pietri, the firm brings together two complementary sensibilities: the technical knowledge of real estate and the human guidance of life projects. For around fifteen years, we have supported sellers, buyers and investors with the same demand: to listen, understand, advise rightly and showcase each place with care. Our approach is independent, committed and deeply rooted in the relationship. Because a real estate project is never just a transaction: it is often a change of life, a transmission, a return to one's roots or a new beginning.",
     },
   },
   featured: {
     overline: { fr: "Coups de cœur", en: "Our favorites" },
     title: { fr: "Des lieux qui ont une âme", en: "Places with a soul" },
     subtitle: {
-      fr: "Chaque propriété de notre collection a été choisie pour l'émotion qu'elle suscite, le caractère qu'elle dégage et l'histoire qu'elle promet.",
-      en: "Every property in our collection was chosen for the emotion it evokes, the character it exudes and the story it promises.",
+      fr: "Chaque bien que nous présentons est choisi pour ce qu'il raconte : une lumière, une vue, une atmosphère, un potentiel, une manière d'habiter. Maisons de famille, appartements avec terrasse, résidences secondaires, biens de caractère ou opportunités d'investissement : notre collection réunit des lieux capables de susciter une rencontre.",
+      en: "Each property we present is chosen for what it tells: a light, a view, an atmosphere, a potential, a way of living. Family homes, apartments with a terrace, second homes, character properties or investment opportunities: our collection brings together places capable of sparking a meeting.",
     },
-    viewAll: { fr: "Découvrir la collection", en: "Discover the collection" },
+    viewAll: { fr: "Découvrir nos biens", en: "Discover our properties" },
   },
   destinations: {
-    overline: { fr: "Territoires", en: "Territories" },
+    overline: { fr: "Corse / Continent / Asie", en: "Corsica / Mainland / Asia" },
     title: { fr: "Trois territoires, une même vision", en: "Three territories, one vision" },
     subtitle: {
       fr: "",
