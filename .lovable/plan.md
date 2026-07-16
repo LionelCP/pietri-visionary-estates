@@ -1,64 +1,95 @@
+# Partager le projet avec ChatGPT — 3 volets
 
-# Plan — Vidéos sur les fiches de biens + guide admin à jour
+## Volet 1 — Guide écrit (PDF) : "Utiliser ChatGPT sur ce projet"
 
-## 1. Réécrire `docs/AJOUTER-UN-BIEN.md`
+Génération d'un PDF simple (même style que le guide existant), qui explique :
 
-Remplacer entièrement l'ancien guide (basé sur le fichier `properties.ts`, **plus utilisé**) par un guide qui reflète le vrai process via l'admin Lovable Cloud.
+1. Les 3 façons de donner du contexte à ChatGPT :
+   - Coller une URL GitHub d'un fichier / dossier
+   - Uploader un ZIP du code (bouton Download codebase de Lovable)
+   - Brancher ChatGPT sur le serveur MCP du site (volet 3)
+2. Les bons prompts à utiliser (ex : "Voici le repo GitHub X, aide-moi à ajouter Y en respectant les conventions").
+3. Ce qu'il ne faut **jamais** coller dans ChatGPT (clés Supabase service_role, secrets, données clients).
+4. Comment récupérer un extrait de code précis à partir de l'URL GitHub.
 
-Le nouveau guide couvrira :
-- Connexion à l'admin (`/admin/login`)
-- Ajouter un bien depuis `/admin/biens` → « Ajouter un bien »
-- Détail de chaque section du formulaire (identité, localisation, prix, caractéristiques, descriptions FR/EN, photos, visite Matterport, **vidéos**, options)
-- Mettre à jour un bien
-- Statuts (Disponible / Sous offre / Réservé / Vendu / Masqué) et leur effet sur le site public
-- Visites virtuelles Matterport (récupération de l'ID)
-- Vidéos (les 3 nouveaux champs)
-- Astuces (prix sur demande, retirer sans supprimer, ordre d'affichage, coup de cœur, mise en avant)
+Livrable : `guide-chatgpt-cabinet-pietri.pdf` téléchargeable.
 
-## 2. Ajouter le support vidéo en base
+## Volet 2 — Connecter le projet à GitHub
 
-Migration Supabase sur la table `properties` — 3 nouveaux champs :
+Je ne peux pas cliquer à votre place. Le guide décrit précisément la procédure :
 
-| Champ | Type | Usage |
+1. Menu Plus (+) en bas à gauche du chat Lovable → **GitHub → Connect project**
+2. Autoriser l'app Lovable GitHub
+3. Choisir le compte/organisation
+4. Cliquer **Create Repository** → un repo est créé avec tout le code
+5. La sync est **bidirectionnelle** (Lovable ↔ GitHub, temps réel)
+
+Une fois fait, vous partagez à ChatGPT l'URL du repo (public ou privé + accès lecture).
+
+## Volet 3 — Serveur MCP : ChatGPT parle directement au site
+
+Installation d'un serveur MCP sur le backend du site pour que ChatGPT (via **Settings → Connectors → Add custom connector**) puisse lire/écrire les biens, sans copier-coller.
+
+### Auth : OAuth obligatoire
+
+Le site a un espace admin protégé (`/admin`) et les biens sont derrière RLS. Un serveur MCP public exposerait toutes les données à n'importe qui sur internet. On passe donc par **OAuth 2.1 Supabase** : ChatGPT se connecte comme un utilisateur admin authentifié.
+
+### Outils exposés à ChatGPT
+
+Version 1, minimale et safe :
+
+| Outil | Type | Description |
 |---|---|---|
-| `video_url` | text | URL YouTube ou Vimeo (lecteur intégré dans la galerie) |
-| `video_file_url` | text | URL d'un MP4 uploadé dans Lovable Cloud |
-| `hero_video_url` | text | Vidéo aérienne/drone diffusée en haut de la fiche, autoplay muet en boucle |
+| `list_properties` | lecture | Liste tous les biens (id, ref, titre, statut, prix) |
+| `get_property` | lecture | Détails complets d'un bien par id ou référence |
+| `search_properties` | lecture | Recherche par ville / type / prix mini-maxi / statut |
+| `update_property_status` | écriture (admin) | Passe un bien en Disponible / Sous offre / Vendu / Masqué |
+| `update_property_media` | écriture (admin) | Met à jour les nouveaux champs vidéo / visite virtuelle |
 
-Tous optionnels (`null` par défaut). Pas de breaking change.
+Toutes les écritures vérifient le rôle admin via la table `user_roles` déjà en place. Aucune écriture ne bypasse la RLS.
 
-## 3. Étendre l'admin (`AdminBienEdit.tsx`)
+### Fichiers créés
 
-Nouvelle section **« Vidéos »** dans le formulaire, après la section Photos :
+```
+src/lib/mcp/index.ts               ← defineMcp (nom, version, auth OAuth)
+src/lib/mcp/tools/list-properties.ts
+src/lib/mcp/tools/get-property.ts
+src/lib/mcp/tools/search-properties.ts
+src/lib/mcp/tools/update-property-status.ts
+src/lib/mcp/tools/update-property-media.ts
+src/pages/OAuthConsent.tsx         ← page /.lovable/oauth/consent
+```
 
-- **Lien YouTube / Vimeo** : champ texte (URL). Détection auto du provider et de l'ID pour le lecteur embed.
-- **Vidéo MP4 (upload)** : bouton upload vers le bucket `property-images` (sous-dossier `videos/`). Limite indicative 50 Mo affichée. Aperçu + bouton « Retirer ».
-- **Vidéo hero (drone)** : champ URL (recommandation : lien direct MP4 hébergé, ou Vimeo). Note explicative sur format conseillé (16:9, < 15 s, muet).
+Modifs :
+- `vite.config.ts` : ajout de `mcpPlugin()` (une ligne)
+- `src/App.tsx` : route `/.lovable/oauth/consent`
+- `src/pages/admin/AdminLogin.tsx` : préservation du `next` pour le retour de consent
 
-Mise à jour du payload de sauvegarde pour inclure les 3 champs.
+Le plugin génère tout seul `supabase/functions/mcp/index.ts` (ne pas y toucher). Deploy de la fonction `mcp` en fin de setup.
 
-## 4. Étendre l'affichage public (`BienDetail.tsx`)
+### Étapes techniques (ordre exact)
 
-- **Hero vidéo** : si `hero_video_url` est renseigné, remplacer la première image de couverture par une `<video autoplay muted loop playsinline>` (avec fallback image principale si erreur de chargement).
-- **Galerie** : si `video_url` (YouTube/Vimeo) → insérer une vignette « ▶ Vidéo » qui ouvre un lecteur embed dans la lightbox existante.
-- **Vidéo MP4** : si `video_file_url` → afficher un player HTML5 natif dans la galerie.
-- Conserver le bouton Matterport existant inchangé.
+1. `npm install @lovable.dev/mcp-js zod`
+2. Ajouter `mcpPlugin()` dans `vite.config.ts`
+3. Créer les 5 tools + `src/lib/mcp/index.ts` avec auth OAuth (issuer = `https://<ref>.supabase.co/auth/v1`)
+4. Créer la page de consentement `/.lovable/oauth/consent` + route
+5. Activer OAuth 2.1 côté Supabase (`configure_oauth_server`)
+6. Générer le manifest MCP
+7. Déployer la fonction edge `mcp`
+8. Ajouter un favicon si absent (utilisé par le connecteur)
+9. Dans le guide PDF : donner l'URL MCP (`https://<ref>.supabase.co/functions/v1/mcp`) et les étapes pour l'ajouter dans ChatGPT (Settings → Connectors → Add → coller l'URL → login OAuth avec votre compte admin du site).
 
-Ajouter un petit helper `getEmbedUrl()` pour transformer une URL YouTube/Vimeo en URL d'iframe embed.
+### Points d'attention
 
-## 5. Mettre à jour les types
+- **Rien n'est cassé** : aucun changement sur les pages publiques ni les biens existants.
+- **RLS respectée** : chaque appel MCP agit avec l'identité de l'utilisateur connecté via OAuth.
+- **Aucun secret exposé** : pas de service_role dans les tools.
+- **Réversible** : supprimer `defineMcp` désactive tout au prochain build.
 
-- `src/lib/properties.ts` : ajouter les 3 champs à l'interface `Property`.
-- Les types Supabase générés se mettent à jour automatiquement après la migration.
+## Ordre d'exécution
 
-## Détails techniques
+1. Serveur MCP (le plus long)
+2. Génération du guide PDF (avec l'URL MCP dedans, une fois le déploiement fait)
+3. Réponse finale avec : le PDF, l'URL MCP à coller dans ChatGPT, et le rappel de l'étape GitHub à faire manuellement
 
-- **Stockage MP4** : bucket `property-images` existant (déjà privé avec policy publique en lecture via getPublicUrl). Sous-dossier `videos/` pour organisation.
-- **Détection provider vidéo** : regex simple sur l'URL (`youtube.com/watch?v=`, `youtu.be/`, `vimeo.com/`).
-- **Hero vidéo** : `preload="metadata"`, `poster={main_image_url}` pour éviter un flash blanc avant le chargement. Sur mobile (< 768px) on garde l'image fixe pour économiser la data.
-- **Pas de transcodage** : on assume que l'utilisateur uploade un MP4 H.264 prêt pour le web. Une note dans le guide recommande HandBrake ou un export « web » depuis l'éditeur vidéo.
-
-## Hors scope (à confirmer si besoin)
-
-- Pas de génération automatique de poster depuis la vidéo (resterait à l'utilisateur de bien renseigner la photo principale).
-- Pas de gestion multi-vidéos (1 lien + 1 fichier + 1 hero par bien — suffisant pour l'usage actuel).
+Prêt à lancer ?
