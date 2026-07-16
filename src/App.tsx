@@ -24,6 +24,7 @@ import AdminBiensList from "./pages/admin/AdminBiensList";
 import AdminBienEdit from "./pages/admin/AdminBienEdit";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import Confidentialite from "./pages/Confidentialite";
+import OAuthConsent from "./pages/OAuthConsent";
 import useVisitTracker from "./hooks/useVisitTracker";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,8 @@ const App = () => (
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/confidentialite" element={<Confidentialite />} />
+              <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
+
 
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/biens" element={<AdminGuard><AdminBiensList /></AdminGuard>} />
