@@ -1,0 +1,24 @@
+# Cabinet Pietri Immobilier
+
+> Site vitrine et back-office éditoriaux de l'agence Cabinet Pietri
+> Immobilier — biens de prestige en Corse, France continentale,
+> Monaco et Bali. Bilingue FR/EN.
+
+## Pages
+
+- [Accueil](/): manifeste, biens vedettes, destinations.
+- [Nos biens](/biens): sélection complète des biens à la vente.
+- [Notre philosophie](/philosophy): valeurs et vision de l'agence.
+- [Destinations](/destinations): zones couvertes par le cabinet.
+- [Service Signature](/signature): offre premium sur mesure.
+- [Vendre avec nous](/services): accompagnement vendeur.
+- [Acheter avec nous](/acheter): accompagnement acquéreur.
+- [À propos](/about): présentation du cabinet et de l'équipe.
+- [Contact](/contact): coordonnées et formulaire de contact.
+- [Politique de confidentialité](/confidentialite): RGPD.
+
+## Optional
+
+- [Fiche bien exemple](/biens): point d'entrée vers les fiches
+  détaillées, chaque bien accessible via son slug dynamique
+  `/biens/<slug>`.
