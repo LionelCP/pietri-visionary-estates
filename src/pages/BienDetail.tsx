@@ -64,7 +64,7 @@ const BienDetail = () => {
   // Contextual CTA per status
   const ctaPrefill = encodeURIComponent(t(`Demande d'information — ${p.title}${location ? ` (${location})` : ""}`, `Information request — ${p.title}${location ? ` (${location})` : ""}`));
   let ctaLabel = t("Demander plus d'informations", "Request more information");
-  let ctaHref = `/contact?bien=${encodeURIComponent(p.slug)}&sujet=${ctaPrefill}`;
+  const ctaHref = `/contact?bien=${encodeURIComponent(p.slug)}&sujet=${ctaPrefill}`;
   let statusNote: string | null = null;
   if (p.status === "sous_offre") {
     ctaLabel = t("Être alerté si le bien redevient disponible", "Be notified if this property becomes available again");
