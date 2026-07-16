@@ -1,27 +1,35 @@
 import { useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/auth/AuthContext";
 
 const AdminLogin = () => {
   const { session, signIn, signUp, loading } = useAuth();
   const nav = useNavigate();
+  const [params] = useSearchParams();
+  const rawNext = params.get("next");
+  const next = rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/admin/biens";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  if (!loading && session) return <Navigate to="/admin/biens" replace />;
+  if (!loading && session) return <Navigate to={next} replace />;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr(null); setBusy(true);
-    const fn = mode === "signin" ? signIn : signUp;
-    const { error } = await fn(email, password);
+    if (mode === "signup") {
+      const { error } = await signUp(email, password);
+      setBusy(false);
+      if (error) setErr(error);
+      else setErr("Compte créé. Vérifiez votre email si la confirmation est activée, puis connectez-vous.");
+      return;
+    }
+    const { error } = await signIn(email, password);
     setBusy(false);
     if (error) setErr(error);
-    else if (mode === "signup") setErr("Compte créé. Vérifiez votre email si la confirmation est activée, puis connectez-vous.");
-    else nav("/admin/biens");
+    else nav(next);
   };
 
   return (
