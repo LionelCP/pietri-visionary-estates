@@ -5,7 +5,7 @@ import PageHero from "@/components/PageHero";
 import PropertyCardDb from "@/components/PropertyCardDb";
 import VirtualTourViewer from "@/components/VirtualTourViewer";
 import heroCollection from "@/assets/hero-collection.jpg";
-import { fetchPublicProperties, type Property, type PropertyRegion, type PropertyStatus, type PropertyType } from "@/lib/properties";
+import { fetchPublicProperties, getPropertyTitle, type Property, type PropertyRegion, type PropertyStatus, type PropertyType } from "@/lib/properties";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const REGION_OPTIONS: { value: PropertyRegion; fr: string; en: string }[] = [
@@ -181,7 +181,7 @@ const Biens = () => {
                 <motion.div key={p.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.05 }}>
                   <PropertyCardDb
                     property={p}
-                    onTourClick={p.matterport_id ? () => setTour({ id: p.matterport_id!, title: p.title }) : undefined}
+                    onTourClick={p.matterport_id ? () => setTour({ id: p.matterport_id!, title: getPropertyTitle(p, lang) }) : undefined}
                   />
                 </motion.div>
               ))}

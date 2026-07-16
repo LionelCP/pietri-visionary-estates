@@ -3,7 +3,7 @@ import { Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/i18n/LanguageContext";
 import StatusBadge from "@/components/StatusBadge";
-import { formatLocation, formatPrice, type Property } from "@/lib/properties";
+import { formatLocation, formatPrice, getPropertyTitle, type Property } from "@/lib/properties";
 import placeholder from "@/assets/hero-collection.jpg";
 
 interface Props {
@@ -17,6 +17,7 @@ const PropertyCardDb = ({ property, onTourClick }: Props) => {
   const image = property.main_image_url || placeholder;
   const location = formatLocation(property);
   const price = formatPrice(property, lang);
+  const title = getPropertyTitle(property, lang);
   const detailHref = `/biens/${property.slug}`;
 
   return (
@@ -25,7 +26,7 @@ const PropertyCardDb = ({ property, onTourClick }: Props) => {
         <div className="relative overflow-hidden aspect-[3/4] mb-5">
           <img
             src={image}
-            alt={`${property.title}${location ? " — " + location : ""}`}
+            alt={`${title}${location ? " — " + location : ""}`}
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
@@ -50,7 +51,7 @@ const PropertyCardDb = ({ property, onTourClick }: Props) => {
             </div>
           )}
         </div>
-        <h3 className="font-display text-lg text-foreground mb-1 group-hover:text-primary transition-colors duration-300">{property.title}</h3>
+        <h3 className="font-display text-lg text-foreground mb-1 group-hover:text-primary transition-colors duration-300">{title}</h3>
         {location && <p className="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2">{location}</p>}
         <p className="font-body text-sm text-primary">{price}</p>
       </Link>

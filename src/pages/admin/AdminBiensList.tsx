@@ -2,16 +2,23 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchAllProperties, type Property, type PropertyStatus } from "@/lib/properties";
+import {
+  archiveProperty,
+  fetchAllProperties,
+  getPropertyReference,
+  getPropertyTitle,
+  publishProperty,
+  unpublishProperty,
+  type Property,
+  type PublicationStatus,
+} from "@/lib/properties";
 import { useAuth } from "@/auth/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
-const STATUS_LABELS: Record<PropertyStatus, string> = {
-  disponible: "Disponible",
-  sous_offre: "Sous offre",
-  reserve: "Réservé",
-  vendu: "Vendu",
-  masque: "Masqué",
+const PUBLICATION_LABELS: Record<PublicationStatus, string> = {
+  draft: "Brouillon",
+  published: "Publié",
+  archived: "Archivé",
 };
 
 const AdminBiensList = () => {
@@ -26,10 +33,24 @@ const AdminBiensList = () => {
 
   useEffect(() => { load(); }, []);
 
-  const updateStatus = async (id: string, status: PropertyStatus) => {
-    const { error } = await supabase.from("properties").update({ status }).eq("id", id);
-    if (error) toast({ title: "Erreur", description: error.message, variant: "destructive" });
-    else { toast({ title: "Statut mis à jour" }); load(); }
+  const runPublicationAction = async (action: "publish" | "unpublish" | "archive", property: Property) => {
+    const labels = {
+      publish: "Bien publié",
+      unpublish: "Bien repassé en brouillon",
+      archive: "Bien archivé",
+    };
+    const result = action === "publish"
+      ? await publishProperty(property.id)
+      : action === "unpublish"
+        ? await unpublishProperty(property.id)
+        : await archiveProperty(property.id);
+
+    if (result.error) {
+      toast({ title: "Action impossible", description: result.error, variant: "destructive" });
+    } else {
+      toast({ title: labels[action] });
+      load();
+    }
   };
 
   const toggleFeatured = async (id: string, value: boolean) => {
@@ -42,13 +63,6 @@ const AdminBiensList = () => {
     const { error } = await supabase.from("properties").update({ display_order: value }).eq("id", id);
     if (error) toast({ title: "Erreur", description: error.message, variant: "destructive" });
     else load();
-  };
-
-  const remove = async (id: string, title: string) => {
-    if (!confirm(`Supprimer définitivement « ${title} » ? Cette action est irréversible.`)) return;
-    const { error } = await supabase.from("properties").delete().eq("id", id);
-    if (error) toast({ title: "Erreur", description: error.message, variant: "destructive" });
-    else { toast({ title: "Bien supprimé" }); load(); }
   };
 
   return (
@@ -90,7 +104,7 @@ const AdminBiensList = () => {
                   <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Ordre</th>
                   <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Titre</th>
                   <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Localisation</th>
-                  <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Statut</th>
+                  <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Publication</th>
                   <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Accueil</th>
                   <th className="px-4 py-3 font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Actions</th>
                 </tr>
@@ -105,24 +119,32 @@ const AdminBiensList = () => {
                       }} className="w-16 bg-background border border-border px-2 py-1 text-sm" />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-display text-base text-foreground">{p.title}</div>
-                      <div className="text-xs text-muted-foreground">{p.slug}</div>
+                      <div className="font-display text-base text-foreground">{getPropertyTitle(p, "fr")}</div>
+                      <div className="text-xs text-muted-foreground">{getPropertyReference(p) ?? p.slug}</div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{[p.city, p.region].filter(Boolean).join(" — ")}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{[p.city, p.region, p.country].filter(Boolean).join(" — ")}</td>
                     <td className="px-4 py-3">
-                      <select value={p.status} onChange={(e) => updateStatus(p.id, e.target.value as PropertyStatus)} className="bg-background border border-border px-2 py-1 text-sm">
-                        {(Object.keys(STATUS_LABELS) as PropertyStatus[]).map((s) => (
-                          <option key={s} value={s}>{STATUS_LABELS[s]}</option>
-                        ))}
-                      </select>
+                      <span className="inline-flex border border-border px-2 py-1 text-xs uppercase tracking-wider text-muted-foreground">
+                        {PUBLICATION_LABELS[p.publication_status]}
+                      </span>
                     </td>
                     <td className="px-4 py-3">
                       <input type="checkbox" checked={p.featured} onChange={(e) => toggleFeatured(p.id, e.target.checked)} className="accent-primary" />
                     </td>
                     <td className="px-4 py-3 space-x-2 whitespace-nowrap">
                       <Link to={`/admin/biens/${p.id}/edit`} className="font-body text-[11px] tracking-[0.15em] uppercase text-primary hover:underline">Éditer</Link>
-                      <Link to={`/biens/${p.slug}`} target="_blank" className="font-body text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground">Voir</Link>
-                      <button onClick={() => remove(p.id, p.title)} className="font-body text-[11px] tracking-[0.15em] uppercase text-destructive hover:underline">Suppr.</button>
+                      {p.publication_status === "published" && (
+                        <Link to={`/biens/${p.slug}`} target="_blank" className="font-body text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground">Voir</Link>
+                      )}
+                      {p.publication_status !== "published" && p.publication_status !== "archived" && (
+                        <button onClick={() => runPublicationAction("publish", p)} className="font-body text-[11px] tracking-[0.15em] uppercase text-primary hover:underline">Publier</button>
+                      )}
+                      {p.publication_status === "published" && (
+                        <button onClick={() => runPublicationAction("unpublish", p)} className="font-body text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground">Dépublier</button>
+                      )}
+                      {p.publication_status !== "archived" && (
+                        <button onClick={() => runPublicationAction("archive", p)} className="font-body text-[11px] tracking-[0.15em] uppercase text-destructive hover:underline">Archiver</button>
+                      )}
                     </td>
                   </tr>
                 ))}
