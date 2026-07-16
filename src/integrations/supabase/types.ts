@@ -16,12 +16,19 @@ export type Database = {
     Tables: {
       properties: {
         Row: {
+          amenities: string[]
+          archived_at: string | null
           area_m2: number | null
           bathrooms: number | null
           bedrooms: number | null
           city: string | null
+          country: string
           coup_de_coeur: boolean
           created_at: string
+          created_by: string | null
+          currency: string
+          description_en: string | null
+          description_fr: string | null
           display_order: number
           drone_video_url: string | null
           energy_class: string | null
@@ -38,6 +45,7 @@ export type Database = {
           highlights: string[]
           id: string
           internal_ref: string | null
+          land_area_m2: number | null
           long_description: string | null
           long_description_en: string | null
           main_image_url: string | null
@@ -47,11 +55,18 @@ export type Database = {
           price_display: string | null
           price_on_request: boolean
           property_type: Database["public"]["Enums"]["property_type"] | null
+          publication_status: Database["public"]["Enums"]["property_publication_status"]
+          published_at: string | null
+          reference: string | null
           region: Database["public"]["Enums"]["property_region"] | null
           rooms: number | null
           sector: string | null
           seo_description: string | null
+          seo_description_en: string | null
+          seo_description_fr: string | null
           seo_title: string | null
+          seo_title_en: string | null
+          seo_title_fr: string | null
           short_description: string | null
           short_description_en: string | null
           show_video: boolean
@@ -59,7 +74,13 @@ export type Database = {
           slug: string
           status: Database["public"]["Enums"]["property_status"]
           title: string
+          title_en: string | null
+          title_fr: string | null
+          transaction_type:
+            | Database["public"]["Enums"]["property_transaction_type"]
+            | null
           updated_at: string
+          updated_by: string | null
           video_file_url: string | null
           video_url: string | null
           video_url_2: string | null
@@ -67,12 +88,19 @@ export type Database = {
           virtual_tour_url: string | null
         }
         Insert: {
+          amenities?: string[]
+          archived_at?: string | null
           area_m2?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
           city?: string | null
+          country?: string
           coup_de_coeur?: boolean
           created_at?: string
+          created_by?: string | null
+          currency?: string
+          description_en?: string | null
+          description_fr?: string | null
           display_order?: number
           drone_video_url?: string | null
           energy_class?: string | null
@@ -89,6 +117,7 @@ export type Database = {
           highlights?: string[]
           id?: string
           internal_ref?: string | null
+          land_area_m2?: number | null
           long_description?: string | null
           long_description_en?: string | null
           main_image_url?: string | null
@@ -98,11 +127,18 @@ export type Database = {
           price_display?: string | null
           price_on_request?: boolean
           property_type?: Database["public"]["Enums"]["property_type"] | null
+          publication_status?: Database["public"]["Enums"]["property_publication_status"]
+          published_at?: string | null
+          reference?: string | null
           region?: Database["public"]["Enums"]["property_region"] | null
           rooms?: number | null
           sector?: string | null
           seo_description?: string | null
+          seo_description_en?: string | null
+          seo_description_fr?: string | null
           seo_title?: string | null
+          seo_title_en?: string | null
+          seo_title_fr?: string | null
           short_description?: string | null
           short_description_en?: string | null
           show_video?: boolean
@@ -110,7 +146,13 @@ export type Database = {
           slug: string
           status?: Database["public"]["Enums"]["property_status"]
           title: string
+          title_en?: string | null
+          title_fr?: string | null
+          transaction_type?:
+            | Database["public"]["Enums"]["property_transaction_type"]
+            | null
           updated_at?: string
+          updated_by?: string | null
           video_file_url?: string | null
           video_url?: string | null
           video_url_2?: string | null
@@ -118,12 +160,19 @@ export type Database = {
           virtual_tour_url?: string | null
         }
         Update: {
+          amenities?: string[]
+          archived_at?: string | null
           area_m2?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
           city?: string | null
+          country?: string
           coup_de_coeur?: boolean
           created_at?: string
+          created_by?: string | null
+          currency?: string
+          description_en?: string | null
+          description_fr?: string | null
           display_order?: number
           drone_video_url?: string | null
           energy_class?: string | null
@@ -140,6 +189,7 @@ export type Database = {
           highlights?: string[]
           id?: string
           internal_ref?: string | null
+          land_area_m2?: number | null
           long_description?: string | null
           long_description_en?: string | null
           main_image_url?: string | null
@@ -149,11 +199,18 @@ export type Database = {
           price_display?: string | null
           price_on_request?: boolean
           property_type?: Database["public"]["Enums"]["property_type"] | null
+          publication_status?: Database["public"]["Enums"]["property_publication_status"]
+          published_at?: string | null
+          reference?: string | null
           region?: Database["public"]["Enums"]["property_region"] | null
           rooms?: number | null
           sector?: string | null
           seo_description?: string | null
+          seo_description_en?: string | null
+          seo_description_fr?: string | null
           seo_title?: string | null
+          seo_title_en?: string | null
+          seo_title_fr?: string | null
           short_description?: string | null
           short_description_en?: string | null
           show_video?: boolean
@@ -161,7 +218,13 @@ export type Database = {
           slug?: string
           status?: Database["public"]["Enums"]["property_status"]
           title?: string
+          title_en?: string | null
+          title_fr?: string | null
+          transaction_type?:
+            | Database["public"]["Enums"]["property_transaction_type"]
+            | null
           updated_at?: string
+          updated_by?: string | null
           video_file_url?: string | null
           video_url?: string | null
           video_url_2?: string | null
@@ -238,6 +301,88 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      archive_property: {
+        Args: { property_id: string }
+        Returns: {
+          amenities: string[]
+          archived_at: string | null
+          area_m2: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string | null
+          country: string
+          coup_de_coeur: boolean
+          created_at: string
+          created_by: string | null
+          currency: string
+          description_en: string | null
+          description_fr: string | null
+          display_order: number
+          drone_video_url: string | null
+          energy_class: string | null
+          featured: boolean
+          floor: string | null
+          gallery: Json
+          has_balcony: boolean
+          has_garden: boolean
+          has_mountain_view: boolean
+          has_open_view: boolean
+          has_sea_view: boolean
+          has_terrace: boolean
+          hero_video_url: string | null
+          highlights: string[]
+          id: string
+          internal_ref: string | null
+          land_area_m2: number | null
+          long_description: string | null
+          long_description_en: string | null
+          main_image_url: string | null
+          matterport_id: string | null
+          plan_pdf_url: string | null
+          price_amount: number | null
+          price_display: string | null
+          price_on_request: boolean
+          property_type: Database["public"]["Enums"]["property_type"] | null
+          publication_status: Database["public"]["Enums"]["property_publication_status"]
+          published_at: string | null
+          reference: string | null
+          region: Database["public"]["Enums"]["property_region"] | null
+          rooms: number | null
+          sector: string | null
+          seo_description: string | null
+          seo_description_en: string | null
+          seo_description_fr: string | null
+          seo_title: string | null
+          seo_title_en: string | null
+          seo_title_fr: string | null
+          short_description: string | null
+          short_description_en: string | null
+          show_video: boolean
+          show_virtual_tour: boolean
+          slug: string
+          status: Database["public"]["Enums"]["property_status"]
+          title: string
+          title_en: string | null
+          title_fr: string | null
+          transaction_type:
+            | Database["public"]["Enums"]["property_transaction_type"]
+            | null
+          updated_at: string
+          updated_by: string | null
+          video_file_url: string | null
+          video_url: string | null
+          video_url_2: string | null
+          virtual_tour_iframe: string | null
+          virtual_tour_url: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "properties"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      can_manage_properties: { Args: { _user_id: string }; Returns: boolean }
       claim_first_admin: { Args: never; Returns: boolean }
       has_role: {
         Args: {
@@ -246,10 +391,177 @@ export type Database = {
         }
         Returns: boolean
       }
+      publish_property: {
+        Args: { property_id: string }
+        Returns: {
+          amenities: string[]
+          archived_at: string | null
+          area_m2: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string | null
+          country: string
+          coup_de_coeur: boolean
+          created_at: string
+          created_by: string | null
+          currency: string
+          description_en: string | null
+          description_fr: string | null
+          display_order: number
+          drone_video_url: string | null
+          energy_class: string | null
+          featured: boolean
+          floor: string | null
+          gallery: Json
+          has_balcony: boolean
+          has_garden: boolean
+          has_mountain_view: boolean
+          has_open_view: boolean
+          has_sea_view: boolean
+          has_terrace: boolean
+          hero_video_url: string | null
+          highlights: string[]
+          id: string
+          internal_ref: string | null
+          land_area_m2: number | null
+          long_description: string | null
+          long_description_en: string | null
+          main_image_url: string | null
+          matterport_id: string | null
+          plan_pdf_url: string | null
+          price_amount: number | null
+          price_display: string | null
+          price_on_request: boolean
+          property_type: Database["public"]["Enums"]["property_type"] | null
+          publication_status: Database["public"]["Enums"]["property_publication_status"]
+          published_at: string | null
+          reference: string | null
+          region: Database["public"]["Enums"]["property_region"] | null
+          rooms: number | null
+          sector: string | null
+          seo_description: string | null
+          seo_description_en: string | null
+          seo_description_fr: string | null
+          seo_title: string | null
+          seo_title_en: string | null
+          seo_title_fr: string | null
+          short_description: string | null
+          short_description_en: string | null
+          show_video: boolean
+          show_virtual_tour: boolean
+          slug: string
+          status: Database["public"]["Enums"]["property_status"]
+          title: string
+          title_en: string | null
+          title_fr: string | null
+          transaction_type:
+            | Database["public"]["Enums"]["property_transaction_type"]
+            | null
+          updated_at: string
+          updated_by: string | null
+          video_file_url: string | null
+          video_url: string | null
+          video_url_2: string | null
+          virtual_tour_iframe: string | null
+          virtual_tour_url: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "properties"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       purge_old_visit_logs: { Args: never; Returns: undefined }
+      unpublish_property: {
+        Args: { property_id: string }
+        Returns: {
+          amenities: string[]
+          archived_at: string | null
+          area_m2: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string | null
+          country: string
+          coup_de_coeur: boolean
+          created_at: string
+          created_by: string | null
+          currency: string
+          description_en: string | null
+          description_fr: string | null
+          display_order: number
+          drone_video_url: string | null
+          energy_class: string | null
+          featured: boolean
+          floor: string | null
+          gallery: Json
+          has_balcony: boolean
+          has_garden: boolean
+          has_mountain_view: boolean
+          has_open_view: boolean
+          has_sea_view: boolean
+          has_terrace: boolean
+          hero_video_url: string | null
+          highlights: string[]
+          id: string
+          internal_ref: string | null
+          land_area_m2: number | null
+          long_description: string | null
+          long_description_en: string | null
+          main_image_url: string | null
+          matterport_id: string | null
+          plan_pdf_url: string | null
+          price_amount: number | null
+          price_display: string | null
+          price_on_request: boolean
+          property_type: Database["public"]["Enums"]["property_type"] | null
+          publication_status: Database["public"]["Enums"]["property_publication_status"]
+          published_at: string | null
+          reference: string | null
+          region: Database["public"]["Enums"]["property_region"] | null
+          rooms: number | null
+          sector: string | null
+          seo_description: string | null
+          seo_description_en: string | null
+          seo_description_fr: string | null
+          seo_title: string | null
+          seo_title_en: string | null
+          seo_title_fr: string | null
+          short_description: string | null
+          short_description_en: string | null
+          show_video: boolean
+          show_virtual_tour: boolean
+          slug: string
+          status: Database["public"]["Enums"]["property_status"]
+          title: string
+          title_en: string | null
+          title_fr: string | null
+          transaction_type:
+            | Database["public"]["Enums"]["property_transaction_type"]
+            | null
+          updated_at: string
+          updated_by: string | null
+          video_file_url: string | null
+          video_url: string | null
+          video_url_2: string | null
+          virtual_tour_iframe: string | null
+          virtual_tour_url: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "properties"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      validate_property_for_publication: {
+        Args: { property_id: string }
+        Returns: string[]
+      }
     }
     Enums: {
       app_role: "admin"
+      property_publication_status: "draft" | "published" | "archived"
       property_region: "corse" | "continent" | "monaco" | "bali" | "autre"
       property_status:
         | "disponible"
@@ -257,6 +569,7 @@ export type Database = {
         | "vendu"
         | "reserve"
         | "masque"
+      property_transaction_type: "sale" | "rent" | "seasonal_rent"
       property_type:
         | "appartement"
         | "maison"
@@ -393,6 +706,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin"],
+      property_publication_status: ["draft", "published", "archived"],
       property_region: ["corse", "continent", "monaco", "bali", "autre"],
       property_status: [
         "disponible",
@@ -401,6 +715,7 @@ export const Constants = {
         "reserve",
         "masque",
       ],
+      property_transaction_type: ["sale", "rent", "seasonal_rent"],
       property_type: [
         "appartement",
         "maison",
