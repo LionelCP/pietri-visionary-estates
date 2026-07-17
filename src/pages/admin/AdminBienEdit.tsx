@@ -2,7 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Upload, Trash2, Star, StarOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Property, PropertyRegion, PropertyStatus, PropertyType, GalleryImage } from "@/lib/properties";
+import {
+  buildPropertyCreatePayload,
+  buildPropertyUpdatePayload,
+  type GalleryImage,
+  type Property,
+  type PropertyRegion,
+  type PropertyType,
+  type TransactionType,
+} from "@/lib/properties";
 import { toast } from "@/hooks/use-toast";
 
 const slugify = (s: string) =>
@@ -15,15 +23,20 @@ const slugify = (s: string) =>
 interface FormState {
   slug: string;
   title: string;
-  status: PropertyStatus;
+  title_en: string;
+  publication_status: "draft" | "published" | "archived";
   property_type: PropertyType | "";
   region: PropertyRegion | "";
+  country: string;
+  transaction_type: TransactionType | "";
   city: string;
   sector: string;
   price_amount: string;
   price_display: string;
   price_on_request: boolean;
+  currency: string;
   area_m2: string;
+  land_area_m2: string;
   rooms: string;
   bedrooms: string;
   bathrooms: string;
@@ -59,12 +72,15 @@ interface FormState {
   show_virtual_tour: boolean;
   seo_title: string;
   seo_description: string;
+  seo_title_en: string;
+  seo_description_en: string;
 }
 
 const empty: FormState = {
-  slug: "", title: "", status: "disponible", property_type: "", region: "",
-  city: "", sector: "", price_amount: "", price_display: "", price_on_request: false,
-  area_m2: "", rooms: "", bedrooms: "", bathrooms: "", floor: "",
+  slug: "", title: "", title_en: "", publication_status: "draft", property_type: "", region: "",
+  country: "France", transaction_type: "sale",
+  city: "", sector: "", price_amount: "", price_display: "", price_on_request: false, currency: "EUR",
+  area_m2: "", land_area_m2: "", rooms: "", bedrooms: "", bathrooms: "", floor: "",
   has_terrace: false, has_garden: false, has_balcony: false,
   has_sea_view: false, has_mountain_view: false, has_open_view: false,
   short_description: "", long_description: "", short_description_en: "", long_description_en: "",
@@ -74,7 +90,7 @@ const empty: FormState = {
   video_url: "", video_url_2: "", video_file_url: "", hero_video_url: "", drone_video_url: "",
   virtual_tour_url: "", virtual_tour_iframe: "",
   show_video: true, show_virtual_tour: true,
-  seo_title: "", seo_description: "",
+  seo_title: "", seo_description: "", seo_title_en: "", seo_description_en: "",
 };
 
 const AdminBienEdit = () => {
@@ -96,21 +112,24 @@ const AdminBienEdit = () => {
       if (error || !data) { toast({ title: "Bien introuvable", variant: "destructive" }); nav("/admin/biens"); return; }
       const p = data as unknown as Property;
       setF({
-        slug: p.slug, title: p.title, status: p.status,
+        slug: p.slug, title: p.title_fr ?? p.title, title_en: p.title_en ?? "",
+        publication_status: p.publication_status ?? "draft",
         property_type: p.property_type ?? "", region: p.region ?? "",
+        country: p.country ?? "France", transaction_type: p.transaction_type ?? "",
         city: p.city ?? "", sector: p.sector ?? "",
         price_amount: p.price_amount?.toString() ?? "", price_display: p.price_display ?? "", price_on_request: p.price_on_request,
-        area_m2: p.area_m2?.toString() ?? "", rooms: p.rooms?.toString() ?? "",
+        currency: p.currency ?? "EUR",
+        area_m2: p.area_m2?.toString() ?? "", land_area_m2: p.land_area_m2?.toString() ?? "", rooms: p.rooms?.toString() ?? "",
         bedrooms: p.bedrooms?.toString() ?? "", bathrooms: p.bathrooms?.toString() ?? "", floor: p.floor ?? "",
         has_terrace: p.has_terrace, has_garden: p.has_garden, has_balcony: p.has_balcony,
         has_sea_view: p.has_sea_view, has_mountain_view: p.has_mountain_view, has_open_view: p.has_open_view,
-        short_description: p.short_description ?? "", long_description: p.long_description ?? "",
-        short_description_en: p.short_description_en ?? "", long_description_en: p.long_description_en ?? "",
-        highlights: p.highlights.join("\n"),
+        short_description: p.short_description ?? "", long_description: p.description_fr ?? p.long_description ?? "",
+        short_description_en: p.short_description_en ?? "", long_description_en: p.description_en ?? p.long_description_en ?? "",
+        highlights: (p.amenities.length > 0 ? p.amenities : p.highlights).join("\n"),
         energy_class: p.energy_class ?? "",
         main_image_url: p.main_image_url ?? "",
         gallery: Array.isArray(p.gallery) ? p.gallery : [],
-        plan_pdf_url: p.plan_pdf_url ?? "", internal_ref: p.internal_ref ?? "",
+        plan_pdf_url: p.plan_pdf_url ?? "", internal_ref: p.reference ?? p.internal_ref ?? "",
         featured: p.featured, coup_de_coeur: p.coup_de_coeur,
         display_order: p.display_order.toString(),
         matterport_id: p.matterport_id ?? "",
@@ -123,7 +142,8 @@ const AdminBienEdit = () => {
         virtual_tour_iframe: p.virtual_tour_iframe ?? "",
         show_video: p.show_video ?? true,
         show_virtual_tour: p.show_virtual_tour ?? true,
-        seo_title: p.seo_title ?? "", seo_description: p.seo_description ?? "",
+        seo_title: p.seo_title_fr ?? p.seo_title ?? "", seo_description: p.seo_description_fr ?? p.seo_description ?? "",
+        seo_title_en: p.seo_title_en ?? "", seo_description_en: p.seo_description_en ?? "",
       });
       setLoading(false);
     });
@@ -185,57 +205,14 @@ const AdminBienEdit = () => {
     e.preventDefault();
     setSaving(true);
     const slug = f.slug.trim() || slugify(`${f.title}-${f.city}`);
-    const payload = {
-      slug,
-      title: f.title.trim(),
-      status: f.status,
-      property_type: f.property_type || null,
-      region: f.region || null,
-      city: f.city.trim() || null,
-      sector: f.sector.trim() || null,
-      price_amount: f.price_amount ? Number(f.price_amount) : null,
-      price_display: f.price_display.trim() || null,
-      price_on_request: f.price_on_request,
-      area_m2: f.area_m2 ? Number(f.area_m2) : null,
-      rooms: f.rooms ? Number(f.rooms) : null,
-      bedrooms: f.bedrooms ? Number(f.bedrooms) : null,
-      bathrooms: f.bathrooms ? Number(f.bathrooms) : null,
-      floor: f.floor.trim() || null,
-      has_terrace: f.has_terrace, has_garden: f.has_garden, has_balcony: f.has_balcony,
-      has_sea_view: f.has_sea_view, has_mountain_view: f.has_mountain_view, has_open_view: f.has_open_view,
-      short_description: f.short_description.trim() || null,
-      long_description: f.long_description.trim() || null,
-      short_description_en: f.short_description_en.trim() || null,
-      long_description_en: f.long_description_en.trim() || null,
-      highlights: f.highlights.split("\n").map((h) => h.trim()).filter(Boolean),
-      energy_class: f.energy_class.trim() || null,
-      main_image_url: f.main_image_url.trim() || null,
-      gallery: f.gallery,
-      plan_pdf_url: f.plan_pdf_url.trim() || null,
-      internal_ref: f.internal_ref.trim() || null,
-      featured: f.featured,
-      coup_de_coeur: f.coup_de_coeur,
-      display_order: Number(f.display_order) || 0,
-      matterport_id: f.matterport_id.trim() || null,
-      video_url: f.video_url.trim() || null,
-      video_url_2: f.video_url_2.trim() || null,
-      video_file_url: f.video_file_url.trim() || null,
-      hero_video_url: f.hero_video_url.trim() || null,
-      drone_video_url: f.drone_video_url.trim() || null,
-      virtual_tour_url: f.virtual_tour_url.trim() || null,
-      virtual_tour_iframe: f.virtual_tour_iframe.trim() || null,
-      show_video: f.show_video,
-      show_virtual_tour: f.show_virtual_tour,
-      seo_title: f.seo_title.trim() || null,
-      seo_description: f.seo_description.trim() || null,
-    };
+    const payload = isNew ? buildPropertyCreatePayload(f, slug) : buildPropertyUpdatePayload(f, slug);
 
     // gallery is JSONB → cast to satisfy generated Json type
     const dbPayload = { ...payload, gallery: payload.gallery as unknown as never };
 
     const res = isNew
-      ? await supabase.from("properties").insert(dbPayload).select("id").single()
-      : await supabase.from("properties").update(dbPayload).eq("id", id!).select("id").single();
+      ? await (supabase.from("properties") as never as { insert: (payload: typeof dbPayload) => { select: (columns: string) => { single: () => Promise<{ error: { message: string } | null }> } } }).insert(dbPayload).select("id").single()
+      : await (supabase.from("properties") as never as { update: (payload: typeof dbPayload) => { eq: (column: string, value: string) => { select: (columns: string) => { single: () => Promise<{ error: { message: string } | null }> } } } }).update(dbPayload).eq("id", id!).select("id").single();
 
     setSaving(false);
     if (res.error) {
@@ -265,8 +242,12 @@ const AdminBienEdit = () => {
           <section className="space-y-5">
             <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Identité</h2>
             <div>
-              <label className={labelCls}>Titre *</label>
+              <label className={labelCls}>Titre FR *</label>
               <input required value={f.title} onChange={(e) => set("title", e.target.value)} onBlur={() => { if (!f.slug) set("slug", slugify(`${f.title}-${f.city}`)); }} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Titre EN</label>
+              <input value={f.title_en} onChange={(e) => set("title_en", e.target.value)} className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Slug URL (auto si vide)</label>
@@ -275,14 +256,9 @@ const AdminBienEdit = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className={labelCls}>Statut</label>
-                <select value={f.status} onChange={(e) => set("status", e.target.value as PropertyStatus)} className={inputCls}>
-                  <option value="disponible">Disponible</option>
-                  <option value="sous_offre">Sous offre</option>
-                  <option value="reserve">Réservé</option>
-                  <option value="vendu">Vendu</option>
-                  <option value="masque">Masqué (hors site public)</option>
-                </select>
+                <label className={labelCls}>Publication</label>
+                <input value={f.publication_status === "published" ? "Publié" : f.publication_status === "archived" ? "Archivé" : "Brouillon"} disabled className={`${inputCls} opacity-70`} />
+                <p className="text-xs text-muted-foreground mt-1">La publication se fait depuis la liste des biens.</p>
               </div>
               <div>
                 <label className={labelCls}>Type de bien</label>
@@ -298,9 +274,18 @@ const AdminBienEdit = () => {
                 </select>
               </div>
               <div>
-                <label className={labelCls}>Référence interne</label>
+                <label className={labelCls}>Référence *</label>
                 <input value={f.internal_ref} onChange={(e) => set("internal_ref", e.target.value)} className={inputCls} />
               </div>
+            </div>
+            <div>
+              <label className={labelCls}>Transaction *</label>
+              <select value={f.transaction_type} onChange={(e) => set("transaction_type", e.target.value as TransactionType)} className={inputCls}>
+                <option value="">—</option>
+                <option value="sale">Vente</option>
+                <option value="rent">Location</option>
+                <option value="seasonal_rent">Location saisonnière</option>
+              </select>
             </div>
           </section>
 
@@ -324,6 +309,10 @@ const AdminBienEdit = () => {
                 <input value={f.city} onChange={(e) => set("city", e.target.value)} className={inputCls} />
               </div>
               <div>
+                <label className={labelCls}>Pays</label>
+                <input value={f.country} onChange={(e) => set("country", e.target.value)} className={inputCls} />
+              </div>
+              <div>
                 <label className={labelCls}>Secteur / quartier</label>
                 <input value={f.sector} onChange={(e) => set("sector", e.target.value)} className={inputCls} />
               </div>
@@ -344,6 +333,10 @@ const AdminBienEdit = () => {
                   <input type="number" value={f.price_amount} onChange={(e) => set("price_amount", e.target.value)} className={inputCls} />
                 </div>
                 <div>
+                  <label className={labelCls}>Devise</label>
+                  <input value={f.currency} onChange={(e) => set("currency", e.target.value.toUpperCase())} className={inputCls} />
+                </div>
+                <div>
                   <label className={labelCls}>Affichage personnalisé (optionnel)</label>
                   <input value={f.price_display} onChange={(e) => set("price_display", e.target.value)} placeholder="€ 1 250 000" className={inputCls} />
                 </div>
@@ -356,6 +349,7 @@ const AdminBienEdit = () => {
             <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Caractéristiques</h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div><label className={labelCls}>Surface (m²)</label><input type="number" value={f.area_m2} onChange={(e) => set("area_m2", e.target.value)} className={inputCls} /></div>
+              <div><label className={labelCls}>Terrain (m²)</label><input type="number" value={f.land_area_m2} onChange={(e) => set("land_area_m2", e.target.value)} className={inputCls} /></div>
               <div><label className={labelCls}>Pièces</label><input type="number" value={f.rooms} onChange={(e) => set("rooms", e.target.value)} className={inputCls} /></div>
               <div><label className={labelCls}>Chambres</label><input type="number" value={f.bedrooms} onChange={(e) => set("bedrooms", e.target.value)} className={inputCls} /></div>
               <div><label className={labelCls}>Salles de bain</label><input type="number" value={f.bathrooms} onChange={(e) => set("bathrooms", e.target.value)} className={inputCls} /></div>
@@ -386,7 +380,7 @@ const AdminBienEdit = () => {
             <div><label className={labelCls}>Short description (EN)</label><textarea rows={2} value={f.short_description_en} onChange={(e) => set("short_description_en", e.target.value)} className={inputCls} /></div>
             <div><label className={labelCls}>Long description (EN)</label><textarea rows={6} value={f.long_description_en} onChange={(e) => set("long_description_en", e.target.value)} className={inputCls} /></div>
             <div>
-              <label className={labelCls}>Points forts (un par ligne)</label>
+              <label className={labelCls}>Équipements / points forts (un par ligne)</label>
               <textarea rows={4} value={f.highlights} onChange={(e) => set("highlights", e.target.value)} placeholder={"Vue panoramique\nProche commerces\nÉtat impeccable"} className={inputCls} />
             </div>
           </section>
@@ -575,8 +569,10 @@ const AdminBienEdit = () => {
                 <input type="number" value={f.display_order} onChange={(e) => set("display_order", e.target.value)} className="w-20 bg-background border border-border px-2 py-1 text-sm" />
               </div>
             </div>
-            <div><label className={labelCls}>SEO title (optionnel)</label><input value={f.seo_title} onChange={(e) => set("seo_title", e.target.value)} className={inputCls} /></div>
-            <div><label className={labelCls}>SEO description (optionnel)</label><textarea rows={2} value={f.seo_description} onChange={(e) => set("seo_description", e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>SEO title FR (optionnel)</label><input value={f.seo_title} onChange={(e) => set("seo_title", e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>SEO description FR (optionnel)</label><textarea rows={2} value={f.seo_description} onChange={(e) => set("seo_description", e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>SEO title EN (optionnel)</label><input value={f.seo_title_en} onChange={(e) => set("seo_title_en", e.target.value)} className={inputCls} /></div>
+            <div><label className={labelCls}>SEO description EN (optionnel)</label><textarea rows={2} value={f.seo_description_en} onChange={(e) => set("seo_description_en", e.target.value)} className={inputCls} /></div>
           </section>
 
           <div className="flex gap-4 pt-4 border-t border-border">

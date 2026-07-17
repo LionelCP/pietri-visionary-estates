@@ -6,7 +6,17 @@ import { ArrowLeft, Play } from "lucide-react";
 import VirtualTourViewer from "@/components/VirtualTourViewer";
 import StatusBadge from "@/components/StatusBadge";
 import PropertyMediaSection from "@/components/PropertyMediaSection";
-import { fetchPropertyBySlug, formatLocation, formatPrice, type Property } from "@/lib/properties";
+import {
+  fetchPropertyBySlug,
+  formatLocation,
+  formatPrice,
+  getPropertyDescription,
+  getPropertyReference,
+  getPropertySeoDescription,
+  getPropertySeoTitle,
+  getPropertyTitle,
+  type Property,
+} from "@/lib/properties";
 import { useLanguage } from "@/i18n/LanguageContext";
 import placeholder from "@/assets/hero-collection.jpg";
 
@@ -50,19 +60,20 @@ const BienDetail = () => {
     );
   }
 
+  const title = getPropertyTitle(p, lang);
   const location = formatLocation(p);
   const price = formatPrice(p, lang);
-  const desc = lang === "fr" ? (p.long_description ?? p.short_description) : (p.long_description_en ?? p.short_description_en ?? p.long_description ?? p.short_description);
-  const shortDesc = lang === "fr" ? p.short_description : (p.short_description_en ?? p.short_description);
+  const desc = getPropertyDescription(p, lang);
+  const shortDesc = lang === "fr" ? (p.short_description ?? p.description_fr) : (p.short_description_en ?? p.description_en ?? p.short_description ?? p.description_fr);
   const mainImage = activeImage || p.main_image_url || placeholder;
   const allImages = [p.main_image_url, ...p.gallery.map((g) => g.url)].filter(Boolean) as string[];
 
-  const seoTitle = p.seo_title || `${p.title}${location ? ` — ${location}` : ""} | Cabinet Pietri Immobilier`;
-  const seoDesc = p.seo_description || shortDesc || `${p.title}${location ? ` à ${location}` : ""} — Cabinet Pietri Immobilier.`;
+  const seoTitle = getPropertySeoTitle(p, lang) || `${title}${location ? ` — ${location}` : ""} | Cabinet Pietri Immobilier`;
+  const seoDesc = getPropertySeoDescription(p, lang) || shortDesc || `${title}${location ? ` à ${location}` : ""} — Cabinet Pietri Immobilier.`;
   const canonical = `https://cabinet-pietri-immobilier.com/biens/${p.slug}`;
 
   // Contextual CTA per status
-  const ctaPrefill = encodeURIComponent(t(`Demande d'information — ${p.title}${location ? ` (${location})` : ""}`, `Information request — ${p.title}${location ? ` (${location})` : ""}`));
+  const ctaPrefill = encodeURIComponent(t(`Demande d'information — ${title}${location ? ` (${location})` : ""}`, `Information request — ${title}${location ? ` (${location})` : ""}`));
   let ctaLabel = t("Demander plus d'informations", "Request more information");
   const ctaHref = `/contact?bien=${encodeURIComponent(p.slug)}&sujet=${ctaPrefill}`;
   let statusNote: string | null = null;
@@ -96,7 +107,7 @@ const BienDetail = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
-    name: p.title,
+    name: title,
     description: seoDesc,
     url: canonical,
     image: mainImage,
@@ -132,7 +143,7 @@ const BienDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background" />
           <div className="absolute bottom-10 left-0 right-0 max-w-[1400px] mx-auto px-6 lg:px-12">
             <span className="font-body text-[11px] tracking-[0.3em] uppercase text-primary block mb-3">{location}</span>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground leading-[1.05]">{p.title}</h1>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground leading-[1.05]">{title}</h1>
           </div>
         </section>
       )}
@@ -150,7 +161,7 @@ const BienDetail = () => {
                 <motion.img
                   key={mainImage}
                   src={mainImage}
-                  alt={`${p.title}${location ? " — " + location : ""}`}
+                  alt={`${title}${location ? " — " + location : ""}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4 }}
@@ -185,7 +196,7 @@ const BienDetail = () => {
             {/* Infos */}
             <div>
               <span className="font-body text-[11px] tracking-[0.3em] uppercase text-primary block mb-3">{location || t("Localisation à préciser", "Location to be confirmed")}</span>
-              <h1 className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.1] mb-4">{p.title}</h1>
+              <h1 className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.1] mb-4">{title}</h1>
               <p className="font-display text-2xl text-primary mb-6">{price}</p>
 
               {statusNote && (
@@ -217,8 +228,8 @@ const BienDetail = () => {
                 {ctaLabel}
               </a>
 
-              {p.internal_ref && (
-                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-6">{t("Réf.", "Ref.")} {p.internal_ref}</p>
+              {getPropertyReference(p) && (
+                <p className="font-body text-[10px] tracking-[0.2em] uppercase text-muted-foreground mt-6">{t("Réf.", "Ref.")} {getPropertyReference(p)}</p>
               )}
             </div>
           </div>
@@ -252,7 +263,7 @@ const BienDetail = () => {
 
 
       {p.matterport_id && (
-        <VirtualTourViewer matterportId={p.matterport_id} title={p.title} isOpen={tourOpen} onClose={() => setTourOpen(false)} />
+        <VirtualTourViewer matterportId={p.matterport_id} title={title} isOpen={tourOpen} onClose={() => setTourOpen(false)} />
       )}
 
       {videoOpen && (p.video_url || p.video_file_url) && (
@@ -262,7 +273,7 @@ const BienDetail = () => {
               {t("Fermer", "Close")} ✕
             </button>
             {p.video_url && getEmbedUrl(p.video_url) ? (
-              <iframe src={getEmbedUrl(p.video_url)!} title={p.title} className="w-full h-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
+              <iframe src={getEmbedUrl(p.video_url)!} title={title} className="w-full h-full border-0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen />
             ) : p.video_file_url ? (
               <video src={p.video_file_url} controls autoPlay className="w-full h-full object-contain bg-black" />
             ) : null}
