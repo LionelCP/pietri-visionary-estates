@@ -1,88 +1,37 @@
-import { Upload, Trash2, Star, StarOff } from "lucide-react";
+import { Upload } from "lucide-react";
 import type { RefObject } from "react";
 import { checkCls, inputCls, labelCls } from "./formStyles";
 import type { PropertyFormSet, PropertyFormState } from "./propertyFormState";
+import { PropertyMediaManager } from "./media/PropertyMediaManager";
 
 type PropertyFormMediaProps = {
   form: PropertyFormState;
   onChange: PropertyFormSet;
-  mainFileRef: RefObject<HTMLInputElement>;
-  galleryFileRef: RefObject<HTMLInputElement>;
   videoFileRef: RefObject<HTMLInputElement>;
   heroVideoFileRef: RefObject<HTMLInputElement>;
   videoUploading: "main" | "hero" | null;
-  onMainUpload: (file: File) => void;
-  onGalleryUpload: (files: FileList) => void;
+  onImageUpload: (file: File) => Promise<string | null>;
   onVideoUpload: (file: File, kind: "main" | "hero") => void;
-  onRemoveGalleryItem: (index: number) => void;
-  onPromoteToMain: (index: number) => void;
 };
 
 export function PropertyFormMedia({
   form,
   onChange,
-  mainFileRef,
-  galleryFileRef,
   videoFileRef,
   heroVideoFileRef,
   videoUploading,
-  onMainUpload,
-  onGalleryUpload,
+  onImageUpload,
   onVideoUpload,
-  onRemoveGalleryItem,
-  onPromoteToMain,
 }: PropertyFormMediaProps) {
   return (
     <>
-      <section className="space-y-5">
-        <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Photos</h2>
-        <div>
-          <label className={labelCls}>Photo principale</label>
-          {form.main_image_url && (
-            <img src={form.main_image_url} alt="Principale" className="w-48 h-36 object-cover mb-3 border border-border" />
-          )}
-          <input ref={mainFileRef} type="file" accept="image/*" hidden onChange={(e) => { const file = e.target.files?.[0]; if (file) onMainUpload(file); }} />
-          <button type="button" onClick={() => mainFileRef.current?.click()} className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase px-4 py-2.5 border border-border hover:border-primary">
-            <Upload size={14} /> {form.main_image_url ? "Remplacer" : "Téléverser"}
-          </button>
-          <input value={form.main_image_url} onChange={(e) => onChange("main_image_url", e.target.value)} placeholder="ou URL externe" className={`${inputCls} mt-3`} />
-        </div>
-
-        <div>
-          <label className={labelCls}>Galerie</label>
-          <input ref={galleryFileRef} type="file" accept="image/*" multiple hidden onChange={(e) => { if (e.target.files?.length) onGalleryUpload(e.target.files); }} />
-          <button type="button" onClick={() => galleryFileRef.current?.click()} className="inline-flex items-center gap-2 font-body text-xs tracking-[0.2em] uppercase px-4 py-2.5 border border-border hover:border-primary mb-4">
-            <Upload size={14} /> Ajouter des photos
-          </button>
-          {form.gallery.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {form.gallery.map((galleryItem, index) => (
-                <div key={`${galleryItem.url}-${index}`} className="relative group">
-                  <img src={galleryItem.url} alt={galleryItem.alt ?? ""} className="w-full aspect-[4/3] object-cover border border-border" />
-                  <input
-                    value={galleryItem.alt ?? ""}
-                    onChange={(e) => {
-                      const next = [...form.gallery];
-                      next[index] = { ...next[index], alt: e.target.value };
-                      onChange("gallery", next);
-                    }}
-                    placeholder="Texte alt SEO"
-                    className="w-full mt-1 text-xs bg-background border border-border px-2 py-1"
-                  />
-                  <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                    <button type="button" onClick={() => onPromoteToMain(index)} title="Définir comme principale" className="bg-background/90 p-1 border border-border">
-                      {form.main_image_url === galleryItem.url ? <Star size={14} className="text-primary fill-current" /> : <StarOff size={14} />}
-                    </button>
-                    <button type="button" onClick={() => onRemoveGalleryItem(index)} title="Supprimer" className="bg-background/90 p-1 border border-border text-destructive">
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <PropertyMediaManager
+        mainImageUrl={form.main_image_url}
+        gallery={form.gallery}
+        onMainImageChange={(url) => onChange("main_image_url", url)}
+        onGalleryChange={(gallery) => onChange("gallery", gallery)}
+        uploadImage={onImageUpload}
+      />
 
       <section className="space-y-5">
         <h2 className="font-display text-xl text-foreground border-b border-border pb-3">Vidéos</h2>

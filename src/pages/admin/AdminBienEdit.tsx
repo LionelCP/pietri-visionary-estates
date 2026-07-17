@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { createProperty, fetchPropertyById, updateProperty, type GalleryImage, type Property } from "@/lib/properties";
+import { createProperty, fetchPropertyById, updateProperty, type Property } from "@/lib/properties";
 import { toast } from "@/hooks/use-toast";
 import { PropertyFormContent } from "@/components/admin/property/PropertyFormContent";
 import { PropertyFormDetails } from "@/components/admin/property/PropertyFormDetails";
@@ -26,8 +26,6 @@ const AdminBienEdit = () => {
   const [form, setForm] = useState<PropertyFormState>(emptyPropertyFormState);
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
-  const mainFileRef = useRef<HTMLInputElement>(null);
-  const galleryFileRef = useRef<HTMLInputElement>(null);
   const videoFileRef = useRef<HTMLInputElement>(null);
   const heroVideoFileRef = useRef<HTMLInputElement>(null);
   const [videoUploading, setVideoUploading] = useState<"main" | "hero" | null>(null);
@@ -60,34 +58,6 @@ const AdminBienEdit = () => {
   }, [id, isNew, nav]);
 
   const set: PropertyFormSet = (key, value) => setForm((state) => ({ ...state, [key]: value }));
-
-  const handleMainUpload = async (file: File) => {
-    const url = await uploadFile(file, "main");
-    if (url) set("main_image_url", url);
-  };
-
-  const handleGalleryUpload = async (files: FileList) => {
-    const uploaded: GalleryImage[] = [];
-    for (const file of Array.from(files)) {
-      const url = await uploadFile(file, "gallery");
-      if (url) uploaded.push({ url, alt: "" });
-    }
-    set("gallery", [...form.gallery, ...uploaded]);
-  };
-
-  const removeGalleryItem = (index: number) => {
-    set("gallery", form.gallery.filter((_, currentIndex) => currentIndex !== index));
-  };
-
-  const promoteToMain = (index: number) => {
-    const item = form.gallery[index];
-    if (!item) return;
-    const nextGallery = [...form.gallery];
-    if (form.main_image_url) nextGallery[index] = { url: form.main_image_url, alt: item.alt };
-    else nextGallery.splice(index, 1);
-    set("main_image_url", item.url);
-    set("gallery", nextGallery);
-  };
 
   const handleVideoUpload = async (file: File, kind: "main" | "hero") => {
     if (file.size > 80 * 1024 * 1024) {
@@ -156,16 +126,11 @@ const AdminBienEdit = () => {
           <PropertyFormMedia
             form={form}
             onChange={set}
-            mainFileRef={mainFileRef}
-            galleryFileRef={galleryFileRef}
             videoFileRef={videoFileRef}
             heroVideoFileRef={heroVideoFileRef}
             videoUploading={videoUploading}
-            onMainUpload={(file) => void handleMainUpload(file)}
-            onGalleryUpload={(files) => void handleGalleryUpload(files)}
+            onImageUpload={(file) => uploadFile(file, "gallery")}
             onVideoUpload={(file, kind) => void handleVideoUpload(file, kind)}
-            onRemoveGalleryItem={removeGalleryItem}
-            onPromoteToMain={promoteToMain}
           />
           <PropertyFormSeo form={form} onChange={set} />
           <PropertyPublicationActions propertyId={id} status={form.publication_status} disabled={saving} onStatusChanged={handleStatusChanged} />
